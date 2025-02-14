@@ -19,11 +19,49 @@
 # version    ：python 3.9
 # Description：
 """
+import importlib
 import sys
-from apps import APP
+
+from PyQt5.QtWidgets import QMainWindow,QApplication
+from PyQt5.QtCore import QCoreApplication
+
+import config
+from QtProjectManager.QtProjectManager import Ui_QtProjectManager
+
+class QtProjectManager(QMainWindow,Ui_QtProjectManager):
+    def __init__(self,parent=None):
+        super(QtProjectManager, self).__init__(parent)
+        self.setupUi(self)
+        self.connect()
+        self.translate()
+
+    ## 信号与槽链接
+    def connect(self):
+        # 如需传递参数可以修改为connect(lambda: self.click(参数))
+        self.pushButton1.clicked.connect(self.on_pushButton)
+
+    ## 槽函数
+    def on_pushButton(self):
+        pro = self.comboBox.currentText()
+        myModule = importlib.import_module(pro)
+        mainWindow = myModule.MainWindow(pro)
+
+    ##
+    def translate(self):
+        _translate = QCoreApplication.translate
+
+        self.statusbar.showMessage(_translate("QtProjectManager","有问题请联系wx:taurrben1"))
+        for index,name in enumerate(config.PROJECTS):
+            print(index,name)
+            self.comboBox.addItem("")
+            self.comboBox.setItemText(index, _translate("QtProjectManager", name))
+
 def main():
-    app = APP(sys.argv)
+    app = QApplication(sys.argv)
+    mainWindow = QtProjectManager()
+    mainWindow.show()
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()

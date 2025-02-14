@@ -43,22 +43,24 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "Z:/Code/python/PyQt/PyQt/views/ui/ui_widgets/exchange",
+    "last_opened_file_path": "Z:/Code/python/PyQt/PyQt",
     "settings.editor.selected.configurable": "fileTemplates"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="Z:\Code\python\PyQt\PyQt" />
       <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_widgets\exchange" />
       <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_widgets\weather" />
       <recent name="Z:\Code\python\PyQt\PyQt\apps" />
       <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_components\battery\qt" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="Z:\Code\python\PyQt\PyQt\QtProjectManager" />
+      <recent name="Z:\Code\python\PyQt\PyQt" />
+      <recent name="Z:\Code\python\PyQt\PyQt\pro1" />
       <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_widgets\weather" />
       <recent name="Z:\Code\python\PyQt\PyQt\controllers" />
-      <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_components" />
-      <recent name="Z:\Code\python\PyQt\PyQt\views\ui\ui_components\battery" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main">
@@ -177,7 +179,7 @@
       <workItem from="1739302694758" duration="1571000" />
       <workItem from="1739305813326" duration="1265000" />
       <workItem from="1739366884323" duration="2108000" />
-      <workItem from="1739369586627" duration="27423000" />
+      <workItem from="1739369586627" duration="37789000" />
     </task>
     <servers />
   </component>
@@ -188,7 +190,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/views/ui/ui_widgets/weather/run.py</url>
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/weather/run.py</url>
           <line>26</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
@@ -197,7 +199,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PyQt$run.coverage" NAME="run Coverage Results" MODIFIED="1739385440713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/views/ui/ui_widgets/weather" />
-    <SUITE FILE_PATH="coverage/PyQt$main.coverage" NAME="main Coverage Results" MODIFIED="1739409516864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQt$main.coverage" NAME="main Coverage Results" MODIFIED="1739549149484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyQt$ViewOffice.coverage" NAME="ViewOffice Coverage Results" MODIFIED="1739286712596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../git/PyQt/QAxWidget" />
     <SUITE FILE_PATH="coverage/PyQt$core.coverage" NAME="core Coverage Results" MODIFIED="1739385612010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/views/ui/ui_view/second_view" />
   </component>
