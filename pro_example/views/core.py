@@ -86,8 +86,8 @@ class View(QMainWindow):
     def set_myindex(self,index):
         self.ctrl.set_myindex(index)
 
-    def update_myindex(self):
-        myindex = self.ctrl.get_myindex()
+    def update_myindex(self,index):
+        myindex = index
         print("myindex:",myindex)
 
 

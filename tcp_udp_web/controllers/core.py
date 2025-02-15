@@ -12,11 +12,30 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : base_config.py
-# Time       ：2025.2.13 0:59
+# File       : core.py
+# Time       ：2025.2.14 23:21
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-PROJECTS = ["pro_example","tcp_udp_web","pro2","pro3"]
+from PyQt5.QtCore import QObject,pyqtSignal
+class Controller(QObject):
+    myindex_updated = pyqtSignal()
+    signal_write_msg = pyqtSignal(str)
+    def __init__(self, model):
+        super(Controller, self).__init__()
+        self.model = model
+
+    #### widget event functions ####
+    def set_myindex(self, index):
+        res = self.model.set_myindex(index)
+        if res:
+            print('DEBUG: change_test_c called with arg value:', index)
+            self.myindex_updated.emit()
+            return res
+        return False
+
+    def get_myindex(self):
+        return self.model.get_myindex()
+

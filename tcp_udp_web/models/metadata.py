@@ -12,11 +12,10 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : base_config.py
-# Time       ：2025.2.13 0:59
+# File       : metadata.py
+# Time       ：2025.2.14 23:40
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-PROJECTS = ["pro_example","tcp_udp_web","pro2","pro3"]

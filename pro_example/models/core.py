@@ -12,11 +12,27 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : base_config.py
-# Time       ：2025.2.13 0:59
+# File       : core.py
+# Time       ：2025.2.14 23:21
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-PROJECTS = ["pro_example","tcp_udp_web","pro2","pro3"]
+from PyQt5 import QtCore
+class Model:
+    def __init__(self):
+        #### create Qt models for compatible widget types ####
+        self.widget_model = QtCore.QStringListModel()
+
+        #### models variables ####
+        self.myindex = None
+
+    #### widget event functions ####
+    def set_myindex(self, index):
+        self.myindex = index
+        print('DEBUG: change_test called with arg value:', index)
+        return True
+
+    def get_myindex(self):
+        return self.myindex

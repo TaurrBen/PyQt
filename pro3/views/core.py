@@ -27,7 +27,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
-from ui_example.ui_widgets.weather.Weather import Ui_Form
+from .ui.Weather import Ui_Form
 
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
