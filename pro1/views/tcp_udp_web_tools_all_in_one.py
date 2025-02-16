@@ -19,26 +19,28 @@ import inspect
 import re
 import time
 
-from tcp_udp_web_ui import ToolsUi
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QFileDialog, QHBoxLayout, QVBoxLayout
+from .ui.tcp_udp_web import Ui_Form
+from utils.thread.stopThreading import StopThreading
 
-class Ui_TCP(QDialog,ToolsUi):
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox, QFileDialog, QHBoxLayout, QVBoxLayout
+
+class Ui_TCP(QWidget,Ui_Form):
     # 定义一个信号
     signal_write_msg = QtCore.pyqtSignal(str)
 
-    def __init__(self, st, num):
+    def __init__(self,num):
         """
         初始化，定义变量
         :param st: StopThreading类创建的对象
         """
         super(Ui_TCP, self).__init__()
+        self.setupUi(self)
         self.setObjectName("")
         self.resize(640, 480)
         self.setAcceptDrops(False)
-        self.setSizeGripEnabled(False)
 
-        self.st = st
+        self.st = StopThreading()
         self.num = num
         self.another = None
         self.msg = None
@@ -53,6 +55,7 @@ class Ui_TCP(QDialog,ToolsUi):
         self.client_address = None
         self.web_client_socket = None
         self.client_socket_list = list()
+        self._translate = QtCore.QCoreApplication.translate
 
         # 创建TCP/UDP套接字
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -71,7 +74,7 @@ class Ui_TCP(QDialog,ToolsUi):
         :return: None
         """
         self.signal_write_msg.connect(self.write_msg)
-        self.comboBox_tcp.currentIndexChanged.connect(self.combobox_change)
+        self.comboBox.currentIndexChanged.connect(self.combobox_change)
         self.pushButton_link.clicked.connect(self.click_link)
         self.pushButton_unlink.clicked.connect(self.click_unlink)
         self.pushButton_get_ip.clicked.connect(self.click_get_ip)
@@ -87,7 +90,7 @@ class Ui_TCP(QDialog,ToolsUi):
         :return: None
         """
         self.close_all()
-        if self.comboBox_tcp.currentIndex() == 0 or self.comboBox_tcp.currentIndex() == 2:
+        if self.comboBox.currentIndex() == 0 or self.comboBox.currentIndex() == 2:
             self.label_sendto.hide()
             self.lineEdit_ip_send.hide()
             self.textEdit_send.show()
@@ -95,7 +98,7 @@ class Ui_TCP(QDialog,ToolsUi):
             self.pushButton_dir.hide()
             self.pushButton_send.show()
             self.label_port.setText(self._translate("TCP-UDP", "端口号:"))
-        if self.comboBox_tcp.currentIndex() == 1 or self.comboBox_tcp.currentIndex() == 3:
+        if self.comboBox.currentIndex() == 1 or self.comboBox.currentIndex() == 3:
             self.label_sendto.show()
             self.lineEdit_ip_send.show()
             self.textEdit_send.show()
@@ -103,7 +106,7 @@ class Ui_TCP(QDialog,ToolsUi):
             self.pushButton_dir.hide()
             self.pushButton_send.show()
             self.label_port.setText(self._translate("TCP-UDP", "目标端口:"))
-        if self.comboBox_tcp.currentIndex() == 4:
+        if self.comboBox.currentIndex() == 4:
             self.label_sendto.hide()
             self.lineEdit_ip_send.hide()
             self.textEdit_send.hide()
@@ -118,15 +121,15 @@ class Ui_TCP(QDialog,ToolsUi):
         pushbutton_link控件点击触发的槽
         :return: None
         """
-        if self.comboBox_tcp.currentIndex() == 0:
+        if self.comboBox.currentIndex() == 0:
             self.tcp_server_start()
-        if self.comboBox_tcp.currentIndex() == 1:
+        if self.comboBox.currentIndex() == 1:
             self.tcp_client_start()
-        if self.comboBox_tcp.currentIndex() == 2:
+        if self.comboBox.currentIndex() == 2:
             self.udp_server_start()
-        if self.comboBox_tcp.currentIndex() == 3:
+        if self.comboBox.currentIndex() == 3:
             self.udp_client_start()
-        if self.comboBox_tcp.currentIndex() == 4:
+        if self.comboBox.currentIndex() == 4:
             self.web_server_start()
         self.link = True
         self.pushButton_unlink.setEnabled(True)
@@ -181,7 +184,7 @@ class Ui_TCP(QDialog,ToolsUi):
         功能函数，关闭网络连接的方法
         :return:
         """
-        if self.comboBox_tcp.currentIndex() == 0:
+        if self.comboBox.currentIndex() == 0:
             try:
                 for client, address in self.client_socket_list:
                     client.close()
@@ -193,7 +196,7 @@ class Ui_TCP(QDialog,ToolsUi):
                 self.st.stop_thread(self.sever_th)
             except Exception as ret:
                 pass
-        if self.comboBox_tcp.currentIndex() == 1:
+        if self.comboBox.currentIndex() == 1:
             try:
                 self.tcp_socket.close()
                 if self.link is True:
@@ -204,7 +207,7 @@ class Ui_TCP(QDialog,ToolsUi):
                 self.st.stop_thread(self.client_th)
             except Exception as ret:
                 pass
-        if self.comboBox_tcp.currentIndex() == 2:
+        if self.comboBox.currentIndex() == 2:
             try:
                 self.udp_socket.close()
                 if self.link is True:
@@ -215,7 +218,7 @@ class Ui_TCP(QDialog,ToolsUi):
                 self.st.stop_thread(self.client_th)
             except Exception as ret:
                 pass
-        if self.comboBox_tcp.currentIndex() == 3:
+        if self.comboBox.currentIndex() == 3:
             try:
                 self.udp_socket.close()
                 if self.link is True:
@@ -226,7 +229,7 @@ class Ui_TCP(QDialog,ToolsUi):
                 self.st.stop_thread(self.client_th)
             except Exception as ret:
                 pass
-        if self.comboBox_tcp.currentIndex() == 4:
+        if self.comboBox.currentIndex() == 4:
             try:
                 for client, address in self.client_socket_list:
                     client.close()
@@ -444,23 +447,23 @@ class Ui_TCP(QDialog,ToolsUi):
         else:
             try:
                 send_msg = (str(self.textEdit_send.toPlainText())).encode('utf-8')
-                if self.comboBox_tcp.currentIndex() == 0:
+                if self.comboBox.currentIndex() == 0:
                     for client, address in self.client_socket_list:
                         client.send(send_msg)
                     self.msg = 'TCP服务端已发送\n'
                     self.signal_write_msg.emit("写入")
-                if self.comboBox_tcp.currentIndex() == 1:
+                if self.comboBox.currentIndex() == 1:
                     self.tcp_socket.send(send_msg)
                     self.msg = 'TCP客户端已发送\n'
                     self.signal_write_msg.emit("写入")
-                if self.comboBox_tcp.currentIndex() == 2:
+                if self.comboBox.currentIndex() == 2:
                     self.msg = 'UDP服务端无法发送，请切换为UDP客户端\n'
                     self.signal_write_msg.emit("写入")
-                if self.comboBox_tcp.currentIndex() == 3:
+                if self.comboBox.currentIndex() == 3:
                     self.udp_socket.sendto(send_msg, self.address)
                     self.msg = 'UDP客户端已发送\n'
                     self.signal_write_msg.emit("写入")
-                if self.comboBox_tcp.currentIndex() == 4:
+                if self.comboBox.currentIndex() == 4:
                     header, body = self.web_send_msg()
                     self.web_client_socket.send(header)
                     self.web_client_socket.send(body)
@@ -556,34 +559,13 @@ class Ui_TCP(QDialog,ToolsUi):
         self.another = Ui_TCP(self.st, num)
         self.another.show()
 
-
-class StopThreading:
-    """强制关闭线程的方法"""
-
-    @staticmethod
-    def _async_raise(tid, exc_type):
-        tid = ctypes.c_long(tid)
-        if not inspect.isclass(exc_type):
-            exc_type = type(exc_type)
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exc_type))
-        if res == 0:
-            raise ValueError("invalid thread id")
-        elif res != 1:
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
-            raise SystemError("PyThreadState_SetAsyncExc failed")
-
-    def stop_thread(self, thread):
-        self._async_raise(thread.ident, SystemExit)
-
-
 def main():
     """
     主函数，用于运行程序
     :return: None
     """
     app = QApplication(sys.argv)
-    st = StopThreading()
-    ui = Ui_TCP(st, 1)
+    ui = Ui_TCP(1)
     ui.show()
     sys.exit(app.exec_())
 
