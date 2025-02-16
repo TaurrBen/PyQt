@@ -28,12 +28,13 @@ from untitled import Ui_Form
 
 
 class MainView(QMainWindow):
-    # 定义pyqtProperty
+    ##### 定义pyqtProperty #####
     test = pyqtProperty(int, fget=lambda self: self.ui.comboBox_test.currentIndex(),
                         fset=lambda self, v: self.ui.comboBox_test.setCurrentIndex(v))
     test_enabled = pyqtProperty(bool, fget=lambda self: self.ui.comboBox_test.isEnabled(),
                                 fset=lambda self, v: self.ui.comboBox_test.setEnabled(v))
 
+    ##### 初始化 #####
     def __init__(self, view_model):
         super().__init__()
         self.view_model = view_model
@@ -95,8 +96,6 @@ class MainViewModel(QObject):
         # 初始化绑定
         model.selected_index_changed.connect(self._on_model_index_changed)
         model.inventory_changed.connect(self._on_model_inventory_changed)
-
-        self._on_model_index_changed(model._selected_index)
 
     # 新增模型暴露属性
     @property

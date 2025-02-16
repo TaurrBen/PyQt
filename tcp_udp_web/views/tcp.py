@@ -25,13 +25,11 @@ import sys
 import time
 
 from PyQt5 import QtWidgets, QtCore
-
-from .ui.tcp_udp_web import Ui_MainWindow
 from utils.thread import stopThreading
 
 
 
-class TcpLogic(Ui_MainWindow):
+class TcpLogic():
     def __init__(self, num):
         super(TcpLogic, self).__init__()
         self.num = num

@@ -19,4 +19,4 @@
 # version    ：python 3.9
 # Description：
 """
-PROJECTS = ["pro_example","tcp_udp_web","pro2","pro3"]
+PROJECTS = ["pro_example","tcp_udp_web","pro1","pro2","pro3"]

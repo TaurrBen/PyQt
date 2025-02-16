@@ -23,8 +23,7 @@
 # views\MainView.py #
 #####################
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import pyqtProperty
-from untitled import Ui_Form
+from tests.untitled import Ui_Form
 
 class MainView(QMainWindow):
 

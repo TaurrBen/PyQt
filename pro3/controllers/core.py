@@ -21,19 +21,40 @@
 """
 from PyQt5.QtCore import QObject,pyqtSignal
 class Controller(QObject):
-    myindex_updated = pyqtSignal()
+
+    #### 1.定义暴露属性 ####
+    # test = QtCore.pyqtProperty(int, fget=lambda self: self.ui.comboBox_test.currentIndex(),
+    #                     fset=lambda self, v: self.ui.comboBox_test.setCurrentIndex(v))
+    # test_enabled = QtCore.pyqtProperty(bool, fget=lambda self: self.ui.comboBox_test.isEnabled(),
+    #                             fset=lambda self, v: self.ui.comboBox_test.setEnabled(v))
+    #### properties for widget value ####
+    @property
+    def test(self):
+        return object
+
+    @test.setter
+    def test(self, value):
+        return object
+
+    #### 2.初始化 ####
     def __init__(self, model):
         super(Controller, self).__init__()
         self.model = model
+        self.setup_bindings()
+        #### signal ####
+        self.signal_write_msg = pyqtSignal(str)
 
-    #### widget event functions ####
+    def setup_bindings(self):
+        pass
+        #### ctrl slots <----- model signal ####
+
+    #### 3.槽函数 ####
+    #### signal event functions ####
+    #### ####
     def set_myindex(self, index):
-        res = self.model.set_myindex(index)
-        if res:
-            print('DEBUG: change_test_c called with arg value:', index)
-            self.myindex_updated.emit()
-            return res
-        return False
+        pass
 
+    #### get event functions ####
     def get_myindex(self):
         return self.model.get_myindex()
+

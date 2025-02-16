@@ -19,32 +19,28 @@
 # version    ：python 3.9
 # Description：
 """
-import requests
-import re
-import matplotlib.pyplot as plt
+from PyQt5 import QtGui, QtCore
+from PyQt5.QtWidgets import QMainWindow,QDialog,QWidget
 
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from .ui.tcp_udp_web import Ui_Form
 
-from .ui.Weather import Ui_Form
+class View(QWidget):
 
-plt.rcParams['font.sans-serif'] = ['SimHei']
-plt.rcParams['axes.unicode_minus'] = False
-
-my_key = '*******'
-
-
-class View(QMainWindow):
-
+    #### 1.定义暴露属性 ####
+    # test = QtCore.pyqtProperty(int, fget=lambda self: self.ui.comboBox_test.currentIndex(),
+    #                     fset=lambda self, v: self.ui.comboBox_test.setCurrentIndex(v))
+    # test_enabled = QtCore.pyqtProperty(bool, fget=lambda self: self.ui.comboBox_test.isEnabled(),
+    #                             fset=lambda self, v: self.ui.comboBox_test.setEnabled(v))
     #### properties for widget value ####
     @property
     def test(self):
         return object
+
     @test.setter
     def test(self, value):
         return object
 
+    #### 2.初始化 ####
     def __init__(self, model, ctrl):
         self.ctrl = ctrl
         super(View, self).__init__()
@@ -53,90 +49,60 @@ class View(QMainWindow):
     def build_ui(self):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.setup_bindings()
+        self.initial_datas_load()
 
-        #### set Qt model for compatible widget types ####
-        # self.ui_example.comboBox_test.setModel(self.model.test_model)
+    #### connect widget signals to event functions ####
+    def setup_bindings(self):
+        pass
+        #### ui signal -----> ui slots ####
 
-        ### connect widget signals to event functions ####
-        self.ui.img.setAlignment(Qt.AlignCenter)
-        self.ui.loc_scan.clicked.connect(lambda:self.set_myindex(
-            index=self.ui.position.text(),
-        ))
-        self.ui.loc_scan.clicked.connect(lambda: self.get_lon_lat(
-            location_name=self.ui.position.text(),
-        ))
-        self.ui.loc_scan.clicked.connect(lambda: self.get_weather(
-            lng=self.ui.longitude.text(),
-            lat=self.ui.latitude.text(),
-            state=1,
-        ))
-        self.ui.temp_radioButton.toggled.connect(lambda: self.get_weather(
-            lng=self.ui.longitude.text(),
-            lat=self.ui.latitude.text(),
-            state=2,
-        ))
-        self.ui.radioButton.toggled.connect(lambda: self.get_weather(
-            lng=self.ui.longitude.text(),
-            lat=self.ui.latitude.text(),
-            state=3,
-        ))
-        self.ctrl.myindex_updated.connect(self.update_myindex)
+        #### ui signal -----> ctrl slots ####
 
-    #### widget signal event functions ####
-    def set_myindex(self,index):
-        self.ctrl.set_myindex(index)
+        #### ui slots <----- ctrl signal ####
 
-    def update_myindex(self):
-        myindex = self.ctrl.get_myindex()
-        print("myindex:",myindex)
+    def initial_datas_load(self):
+        self.combobox_change()
 
 
+    #### 3.槽函数 ####
+    #### signal event functions ####
+    #### ui signal -----> ui slots ####
+    def combobox_change(self):
+        _translate = QtCore.QCoreApplication.translate
+        if self.ui.comboBox.currentIndex() == 0 or self.ui.comboBox.currentIndex() == 2:
+            self.ui.label_sendto.hide()
+            self.ui.label_dir.hide()
+            self.ui.pushButton_dir.hide()
+            self.ui.pushButton_send.show()
+            self.ui.lineEdit_ip_send.hide()
+            self.ui.textEdit_send.show()
+            self.ui.label_port.setText(_translate("TCP-UDP", "端口号:"))
 
+        if self.ui.comboBox.currentIndex() == 1 or self.ui.comboBox.currentIndex() == 3:
+            self.ui.label_sendto.show()
+            self.ui.label_dir.hide()
+            self.ui.pushButton_dir.hide()
+            self.ui.pushButton_send.show()
+            self.ui.lineEdit_ip_send.show()
+            self.ui.textEdit_send.show()
+            self.ui.label_port.setText(_translate("TCP-UDP", "目标端口:"))
 
-    # 根据地点名称获取其经纬度以及简单的描述信息
-    def get_lon_lat(self, location_name):
-        location_api = 'https://map.baidu.com/geocoding/v3/?address={}&output=json&ak={}&callback=showLocation'.format(
-            location_name, my_key)
-        try:
-            res = requests.get(location_api)
-            res = res.text
-        except Exception as e:
-            print(e)
-        res = eval(re.findall('{.*}', res)[0])
-        if res:
-            self.ui.longitude.setText(str(round(res['result']['location']['lng'], 6)))
-            self.ui.latitude.setText(str(round(res['result']['location']['lat'], 6)))
-            self.ui.information.setText(str(res['result']['level']))
+        if self.ui.comboBox.currentIndex() == 4:
 
-    # 根据经纬度获取天气信息
-    def get_weather(self, lng, lat, state):
-        weather_api = 'https://res.abeim.cn/api-weather?lng={}&lat={}'.format(lng, lat)
-        try:
-            res = requests.get(weather_api)
-            res = res.json()
-        except Exception as e:
-            print(e)
-        if state==1:
-            self.ui.temp_location.setText(res['地址'])
-            self.ui.time_stamp.setText(res['更新时间'])
-            self.ui.temp_now.setText(res['现在']['温度'])
-            self.ui.humidity_now.setText(res['现在']['湿度'])
-            self.ui.pressure.setText(res['现在']['气压'])
-        elif state==2:
-            temp = [i['温度'] for i in res['小时预报']['温度']]
-            plt.figure()
-            plt.plot(list(range(1, len(temp)+1)), temp)
-            plt.xlabel('距离现在多少个小时')
-            plt.ylabel('温度')
-            plt.grid()
-            plt.savefig('img/1.jpg')
-            self.img.setPixmap(QPixmap('img/1.jpg'))
-        elif state==3:
-            temp = [float(i['风速']) for i in res['小时预报']['风']]
-            plt.figure()
-            plt.plot(list(range(1, len(temp)+1)), temp)
-            plt.xlabel('距离现在多少个小时')
-            plt.ylabel('风速')
-            plt.grid()
-            plt.savefig('img/2.jpg')
-            self.img.setPixmap(QPixmap('img/2.jpg'))
+            self.ui.label_sendto.hide()
+            self.ui.label_dir.show()
+            self.ui.pushButton_dir.show()
+            self.ui.pushButton_send.hide()
+            self.ui.lineEdit_ip_send.hide()
+            self.ui.label_send.hide()
+            self.ui.textEdit_send.hide()
+            self.ui.label_port.setText(_translate("TCP-UDP", "端口号:"))
+
+    #### ui signal -----> ctrl slots ####
+    def set_index(self,index):
+        pass
+
+    #### ui slots <----- ctrl signal ####
+    def update_index(self):
+        pass

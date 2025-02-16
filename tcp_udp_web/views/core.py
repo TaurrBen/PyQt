@@ -42,6 +42,7 @@ class View(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.connect()
+        self.combobox_change()
 
         #### set Qt model for compatible widget types ####
         # self.ui_example.comboBox_test.setModel(self.model.test_model)
