@@ -38,33 +38,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "Z:/Code/python/PyQt/PyQt/tcp_udp_web/views/ui",
-    "settings.editor.selected.configurable": "fileTemplates"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;Z:/Code/python/PyQt/PyQt/tests&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;fileTemplates&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="Z:\Code\python\PyQt\PyQt\tcp_udp_web\views\ui" />
-      <recent name="Z:\Code\python\PyQt\PyQt" />
-      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\pyqt_mvc" />
-      <recent name="Z:\Code\python\PyQt\PyQt\QtProjectManager" />
-      <recent name="Z:\Code\python\PyQt\PyQt\tcp_udp_web\views" />
+      <recent name="Z:\Code\python\PyQt\PyQt\tests" />
+      <recent name="Z:\Code\python\PyQt\PyQt\utils\thread" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\imgProcess" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\截屏" />
+      <recent name="Z:\Code\python\PyQt\PyQt\tests\data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="Z:\Code\python\PyQt\PyQt\pro_example2\views" />
-      <recent name="Z:\Code\python\PyQt\PyQt\pro_example2\views\ui" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\MusicPlayer" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\imgProcess\2" />
       <recent name="Z:\Code\python\PyQt\PyQt\tests" />
-      <recent name="Z:\Code\python\PyQt\PyQt\tcp_udp_web\views" />
-      <recent name="Z:\Code\python\PyQt\PyQt\tcp_udp_web\views\ui" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools\QtWebEngine" />
+      <recent name="Z:\Code\python\PyQt\PyQt\ui_example\ui_widgets\tools" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main (1)">
-    <configuration name="core" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.music">
+    <configuration name="BasicProcessingUtil" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyQt" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -72,12 +72,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pro_example2/views" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/com/zeketian/imageutil/control" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pro_example2/views/core.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/com/zeketian/imageutil/control/BasicProcessingUtil.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -86,7 +86,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyQt" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -94,12 +94,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ui_example/ui_widgets/tools/tcp_udp_web" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ui_example/ui_widgets/tools/imgProcess/2/com/zeketian/imageutil" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ui_example/ui_widgets/tools/tcp_udp_web/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ui_example/ui_widgets/tools/imgProcess/2/com/zeketian/imageutil/Main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -108,7 +108,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyQt" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -116,12 +116,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/com/zeketian/imageutil" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/com/zeketian/imageutil/Main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -130,7 +130,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="tcp (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="MainUI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyQt" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -138,12 +138,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pro_example2/views" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/com/zeketian/imageutil/ui" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pro_example2/views/tcp.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/com/zeketian/imageutil/ui/MainUI.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -152,7 +152,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="tcp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="music" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyQt" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -160,12 +160,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pro_example2/views/ui" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/MusicPlayer" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="Z:\Code\python\PyQt\PyQt\pro_example2\views\tcp.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/MusicPlayer/music.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -176,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main (1)" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.core" />
-        <item itemvalue="Python.tcp (1)" />
-        <item itemvalue="Python.tcp" />
+        <item itemvalue="Python.music" />
+        <item itemvalue="Python.Main" />
+        <item itemvalue="Python.Main (1)" />
+        <item itemvalue="Python.MainUI" />
+        <item itemvalue="Python.BasicProcessingUtil" />
       </list>
     </recent_temporary>
   </component>
@@ -203,7 +203,10 @@
       <workItem from="1739305813326" duration="1265000" />
       <workItem from="1739366884323" duration="2108000" />
       <workItem from="1739369586627" duration="82768000" />
-      <workItem from="1739722157697" duration="8171000" />
+      <workItem from="1739722157697" duration="21601000" />
+      <workItem from="1739743990015" duration="18646000" />
+      <workItem from="1739764137039" duration="1445000" />
+      <workItem from="1739766173409" duration="1324000" />
     </task>
     <servers />
   </component>
@@ -214,7 +217,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/weather/run.py</url>
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/weather/1/run.py</url>
           <line>26</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
@@ -224,64 +227,9 @@
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>32</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>35</line>
-          <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>40</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>43</line>
-          <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>66</line>
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>84</line>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>99</line>
-          <option name="timeStamp" value="58" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>96</line>
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/aaaa.py</url>
-          <line>126</line>
-          <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/pyqt_mvc/py_qt_mvc.py</url>
           <line>397</line>
           <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/bbbb.py</url>
-          <line>21</line>
-          <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tcp_udp_web/views/core.py</url>
@@ -309,11 +257,6 @@
           <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pro_example2/__init__.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pro_example2/views/tcp_udp_web_tools_all_in_one.py</url>
           <line>121</line>
           <option name="timeStamp" value="78" />
@@ -323,25 +266,136 @@
           <line>140</line>
           <option name="timeStamp" value="79" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pro1/views/core.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pro1/__init__.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/PyQt5_Image+GIF_Banner/PyQt5_img_to_char_scale.py</url>
+          <line>119</line>
+          <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/git2img/util/gif_to_char.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/PyQt5_Image+GIF_Banner/util/gif_to_char.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/PyQt5_Image+GIF_Banner/util/gif_to_char.py</url>
+          <line>38</line>
+          <option name="timeStamp" value="100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/PyQt5_Image+GIF_Banner/util/gif_to_char.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="109" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/clipboardConverter/main.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="114" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/clipboardConverter/main.py</url>
+          <line>64</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/clipboardConverter/main.py</url>
+          <line>82</line>
+          <option name="timeStamp" value="117" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/screenshot/screenshot.py</url>
+          <line>112</line>
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/screenshot/screenshot.py</url>
+          <line>119</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_example/ui_widgets/tools/screenshot/screenshot.py</url>
+          <line>131</line>
+          <option name="timeStamp" value="144" />
+        </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PyQt$tcp__1_.coverage" NAME="tcp (1) Coverage Results" MODIFIED="1739726142741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro_example2/views" />
     <SUITE FILE_PATH="coverage/PyQt$tcp_logic.coverage" NAME="tcp_logic Coverage Results" MODIFIED="1739560029018" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tcp_udp_web/views/ui" />
-    <SUITE FILE_PATH="coverage/PyQt$main__2_.coverage" NAME="main (2) Coverage Results" MODIFIED="1739560038383" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tcp_udp_web/views/ui" />
-    <SUITE FILE_PATH="coverage/PyQt$aaaa.coverage" NAME="aaaa Coverage Results" MODIFIED="1739626572834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQt$main__2_.coverage" NAME="main (2) Coverage Results" MODIFIED="1739763637061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$Main.coverage" NAME="Main Coverage Results" MODIFIED="1739765030355" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/com/zeketian/imageutil" />
+    <SUITE FILE_PATH="coverage/PyQt$bbbb.coverage" NAME="bbbb Coverage Results" MODIFIED="1739634330506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQt$service_hooks.coverage" NAME="service_hooks Coverage Results" MODIFIED="1739741840850" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/windows系统代理控制开关" />
+    <SUITE FILE_PATH="coverage/PyQt$pppp.coverage" NAME="pppp Coverage Results" MODIFIED="1739761913973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/3D_Transform_Visualization/demo" />
+    <SUITE FILE_PATH="coverage/PyQt$tcp_udp_web_tools_all_in_one.coverage" NAME="tcp_udp_web_tools_all_in_one Coverage Results" MODIFIED="1739733758280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro1/views" />
+    <SUITE FILE_PATH="coverage/PyQt$music.coverage" NAME="music Coverage Results" MODIFIED="1739766427314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/MusicPlayer" />
+    <SUITE FILE_PATH="coverage/PyQt$callWeatherWin.coverage" NAME="callWeatherWin Coverage Results" MODIFIED="1739755229228" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/天气预报查询" />
+    <SUITE FILE_PATH="coverage/PyQt$core.coverage" NAME="core Coverage Results" MODIFIED="1739726247493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro_example2/views" />
+    <SUITE FILE_PATH="coverage/PyQt$tcp__1_.coverage" NAME="tcp (1) Coverage Results" MODIFIED="1739726142741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro_example2/views" />
+    <SUITE FILE_PATH="coverage/PyQt$main__3_.coverage" NAME="main (3) Coverage Results" MODIFIED="1739751514526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/护理管理sql调试日志开关" />
+    <SUITE FILE_PATH="coverage/PyQt$MainWindow.coverage" NAME="MainWindow Coverage Results" MODIFIED="1739744843448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/自动登录上网认证" />
+    <SUITE FILE_PATH="coverage/PyQt$callWeatherWin__1_.coverage" NAME="callWeatherWin (1) Coverage Results" MODIFIED="1739755663347" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/weather/2" />
+    <SUITE FILE_PATH="coverage/PyQt$001_pyqt_matplotlib.coverage" NAME="001-pyqt&amp;matplotlib Coverage Results" MODIFIED="1739753651933" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/pyqt+matplotlib结合" />
+    <SUITE FILE_PATH="coverage/PyQt$screenshot.coverage" NAME="screenshot Coverage Results" MODIFIED="1739754705740" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/截屏" />
+    <SUITE FILE_PATH="coverage/PyQt$callTranslate.coverage" NAME="callTranslate Coverage Results" MODIFIED="1739761183590" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/翻译软件" />
+    <SUITE FILE_PATH="coverage/PyQt$random_cat_app_v2.coverage" NAME="random_cat_app_v2 Coverage Results" MODIFIED="1739737414993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/CatCat" />
+    <SUITE FILE_PATH="coverage/PyQt$app.coverage" NAME="app Coverage Results" MODIFIED="1739738468526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/VOICE_DOCX" />
+    <SUITE FILE_PATH="coverage/PyQt$Mythreading.coverage" NAME="Mythreading Coverage Results" MODIFIED="1739762713372" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/3D_Transform_Visualization/demo" />
+    <SUITE FILE_PATH="coverage/PyQt$PyQt5_img_to_char_scale.coverage" NAME="PyQt5_img_to_char_scale Coverage Results" MODIFIED="1739741450373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/PyQt5_Image+GIF_Banner" />
+    <SUITE FILE_PATH="coverage/PyQt$pyqtmed_se.coverage" NAME="pyqtmed_se Coverage Results" MODIFIED="1739736264074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$main_window.coverage" NAME="main_window Coverage Results" MODIFIED="1739761802657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/3D_Transform_Visualization" />
+    <SUITE FILE_PATH="coverage/PyQt$logger.coverage" NAME="logger Coverage Results" MODIFIED="1739750100138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils/log" />
+    <SUITE FILE_PATH="coverage/PyQt$001_Timer.coverage" NAME="001-Timer定时器 Coverage Results" MODIFIED="1739753799359" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$Main__1_.coverage" NAME="Main (1) Coverage Results" MODIFIED="1739764686974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/imgProcess/2/com/zeketian/imageutil" />
     <SUITE FILE_PATH="coverage/PyQt$run.coverage" NAME="run Coverage Results" MODIFIED="1739385440713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/views/ui/ui_widgets/weather" />
     <SUITE FILE_PATH="coverage/PyQt$tcp_udp_web_ui.coverage" NAME="tcp_udp_web_ui Coverage Results" MODIFIED="1739559852639" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tcp_udp_web/views/ui" />
-    <SUITE FILE_PATH="coverage/PyQt$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1739641751335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/tcp_udp_web" />
-    <SUITE FILE_PATH="coverage/PyQt$main.coverage" NAME="main Coverage Results" MODIFIED="1739730296345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyQt$ViewOffice.coverage" NAME="ViewOffice Coverage Results" MODIFIED="1739286712596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../git/PyQt/QAxWidget" />
+    <SUITE FILE_PATH="coverage/PyQt$main__4_.coverage" NAME="main (4) Coverage Results" MODIFIED="1739743704393" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/自动登录上网认证" />
+    <SUITE FILE_PATH="coverage/PyQt$main.coverage" NAME="main Coverage Results" MODIFIED="1739762027177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyQt$py_qt_mvc.coverage" NAME="py_qt_mvc Coverage Results" MODIFIED="1739628057391" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/pyqt_mvc" />
-    <SUITE FILE_PATH="coverage/PyQt$bbbb.coverage" NAME="bbbb Coverage Results" MODIFIED="1739634330506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyQt$bbbb__1_.coverage" NAME="bbbb (1) Coverage Results" MODIFIED="1739637250663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/PyQt$aaa.coverage" NAME="aaa Coverage Results" MODIFIED="1739624177723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PyQt$tcp_udp_web_tools_all_in_one.coverage" NAME="tcp_udp_web_tools_all_in_one Coverage Results" MODIFIED="1739550880841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tcp_udp_web/views/ui" />
+    <SUITE FILE_PATH="coverage/PyQt$callWinShowImg.coverage" NAME="callWinShowImg Coverage Results" MODIFIED="1739754959304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/图像处理软件" />
+    <SUITE FILE_PATH="coverage/PyQt$MainUI.coverage" NAME="MainUI Coverage Results" MODIFIED="1739764272954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/com/zeketian/imageutil/ui" />
+    <SUITE FILE_PATH="coverage/PyQt$auto.coverage" NAME="auto Coverage Results" MODIFIED="1739745667466" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/自动登录上网认证" />
+    <SUITE FILE_PATH="coverage/PyQt$BasicProcessingUtil.coverage" NAME="BasicProcessingUtil Coverage Results" MODIFIED="1739764238391" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/com/zeketian/imageutil/control" />
+    <SUITE FILE_PATH="coverage/PyQt$002_.coverage" NAME="002-提取图片中的红色区域 Coverage Results" MODIFIED="1739754029904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/PyQt$tcp.coverage" NAME="tcp Coverage Results" MODIFIED="1739726023084" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro_example2/views/ui" />
-    <SUITE FILE_PATH="coverage/PyQt$core.coverage" NAME="core Coverage Results" MODIFIED="1739726247493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pro_example2/views" />
+    <SUITE FILE_PATH="coverage/PyQt$aaaa.coverage" NAME="aaaa Coverage Results" MODIFIED="1739626572834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQt$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1739763505238" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/多窗口项目模板" />
+    <SUITE FILE_PATH="coverage/PyQt$pyqt5_graph.coverage" NAME="pyqt5_graph Coverage Results" MODIFIED="1739761537327" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/3D_Transform_Visualization/demo" />
+    <SUITE FILE_PATH="coverage/PyQt$ViewOffice.coverage" NAME="ViewOffice Coverage Results" MODIFIED="1739286712596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../git/PyQt/QAxWidget" />
+    <SUITE FILE_PATH="coverage/PyQt$dialog_SE_Overview_c.coverage" NAME="dialog_SE_Overview_c Coverage Results" MODIFIED="1739736171821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$call_video_capture.coverage" NAME="call_video_capture Coverage Results" MODIFIED="1739755172464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/视频流界面实现" />
+    <SUITE FILE_PATH="coverage/PyQt$bbbb__1_.coverage" NAME="bbbb (1) Coverage Results" MODIFIED="1739637250663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$pyqttask.coverage" NAME="pyqttask Coverage Results" MODIFIED="1739737013717" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/PyQt$aaa.coverage" NAME="aaa Coverage Results" MODIFIED="1739624177723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQt$callWinShowImg__1_.coverage" NAME="callWinShowImg (1) Coverage Results" MODIFIED="1739755143460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui_example/ui_widgets/tools/imgProcess/1" />
+    <SUITE FILE_PATH="coverage/PyQt$random_cat_app.coverage" NAME="random_cat_app Coverage Results" MODIFIED="1739737224832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/CatCat" />
+    <SUITE FILE_PATH="coverage/PyQt$test.coverage" NAME="test Coverage Results" MODIFIED="1739745621730" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/自动登录上网认证" />
+    <SUITE FILE_PATH="coverage/PyQt$003_.coverage" NAME="003-截屏软件 Coverage Results" MODIFIED="1739754106461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
   </component>
 </project>

@@ -12,7 +12,7 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : main.py.py
+# File       : QtWebEngine.py.py
 # Time       ：2025.2.11 22:49
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
@@ -22,7 +22,7 @@
 import importlib
 import sys
 
-from PyQt5.QtWidgets import QMainWindow,QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt5.QtCore import QCoreApplication
 
 import config
@@ -43,9 +43,11 @@ class QtProjectManager(QMainWindow,Ui_QtProjectManager):
     ## 槽函数
     def on_pushButton(self):
         pro = self.comboBox.currentText()
-        myModule = importlib.import_module(pro)
-        mainWindow = myModule.MainWindow(pro)
-
+        try:
+            myModule = importlib.import_module(pro)
+            mainWindow = myModule.MainWindow(pro)
+        except Exception as e:
+            logger.init_loging_config("error").error("出错啦")
     ##
     def translate(self):
         _translate = QCoreApplication.translate

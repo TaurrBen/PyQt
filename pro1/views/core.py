@@ -72,34 +72,6 @@ class View():
     #### ui signal -----> ui slots ####
     def combobox_change(self):
         _translate = QtCore.QCoreApplication.translate
-        if self.ui.comboBox.currentIndex() == 0 or self.ui.comboBox.currentIndex() == 2:
-            self.ui.label_sendto.hide()
-            self.ui.label_dir.hide()
-            self.ui.pushButton_dir.hide()
-            self.ui.pushButton_send.show()
-            self.ui.lineEdit_ip_send.hide()
-            self.ui.textEdit_send.show()
-            self.ui.label_port.setText(_translate("TCP-UDP", "端口号:"))
-
-        if self.ui.comboBox.currentIndex() == 1 or self.ui.comboBox.currentIndex() == 3:
-            self.ui.label_sendto.show()
-            self.ui.label_dir.hide()
-            self.ui.pushButton_dir.hide()
-            self.ui.pushButton_send.show()
-            self.ui.lineEdit_ip_send.show()
-            self.ui.textEdit_send.show()
-            self.ui.label_port.setText(_translate("TCP-UDP", "目标端口:"))
-
-        if self.ui.comboBox.currentIndex() == 4:
-
-            self.ui.label_sendto.hide()
-            self.ui.label_dir.show()
-            self.ui.pushButton_dir.show()
-            self.ui.pushButton_send.hide()
-            self.ui.lineEdit_ip_send.hide()
-            self.ui.label_send.hide()
-            self.ui.textEdit_send.hide()
-            self.ui.label_port.setText(_translate("TCP-UDP", "端口号:"))
 
     #### ui slots <----- ctrl signal ####
     def update_msg(self,msg):

@@ -19,4 +19,7 @@
 # version    ：python 3.9
 # Description：
 """
-PROJECTS = ["pro_example","pro_example2","pro1"]
+PROJECTS = ["pro_example","pro_example2","pro1","pro3"]
+
+from utils.log import logger
+logger = logger.init_loging_config("QtProjectManager","debug.log")

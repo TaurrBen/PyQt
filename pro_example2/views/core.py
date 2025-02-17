@@ -46,6 +46,7 @@ class View():
         self.ctrl = ctrl
         super(View, self).__init__()
         self.build_ui()
+        self.ui.show()
 
     def build_ui(self):
         self.ui = Ui_TCP(1)
@@ -70,6 +71,13 @@ class View():
     #### 3.槽函数 ####
     #### signal event functions ####
     #### ui signal -----> ui slots ####
+    # 也可以以这种方式做，但是名字要对应
+    # @pyqtSlot()
+    # def on_pushButton_clicked(self):
+    #     if self.status:
+    #         self.close_proxy(True)
+    #     else:
+    #         self.set_proxy()
     def combobox_change(self):
         _translate = QtCore.QCoreApplication.translate
         if self.ui.comboBox.currentIndex() == 0 or self.ui.comboBox.currentIndex() == 2:
