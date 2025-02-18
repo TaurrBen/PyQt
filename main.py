@@ -42,7 +42,7 @@ class QtProjectManager(QMainWindow,Ui_QtProjectManager):
 
     ## 槽函数
     def on_pushButton(self):
-        pro = self.comboBox.currentText()
+        pro = "project_all."+self.comboBox.currentText()
         try:
             myModule = importlib.import_module(pro)
             mainWindow = myModule.MainWindow(pro)
