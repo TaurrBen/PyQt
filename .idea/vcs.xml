@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/tests/3D_Transform_Visualization" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tests/kuaishou" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ui_example/QWidgetDemo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ui_example/ui_widgets/tools/3D_Transform_Visualization" vcs="Git" />
   </component>
