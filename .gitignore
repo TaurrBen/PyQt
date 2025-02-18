@@ -1,1 +1,6 @@
 /clearPycache.py
+/tests
+/ui_example
+/.idea
+**/__pycache__
+/debug.log

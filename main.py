@@ -47,7 +47,7 @@ class QtProjectManager(QMainWindow,Ui_QtProjectManager):
             myModule = importlib.import_module(pro)
             mainWindow = myModule.MainWindow(pro)
         except Exception as e:
-            logger.init_loging_config("error").error("出错啦")
+            config.logger.error("导入{}失败".format(pro))
     ##
     def translate(self):
         _translate = QCoreApplication.translate
