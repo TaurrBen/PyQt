@@ -19,7 +19,13 @@
 # version    ：python 3.9
 # Description：
 """
+import os
+
 PROJECTS = ["pro_example","pro_example2","pro1","pro3"]
+LOG_FILE_NAME = "logging.conf"
+LOG_NUM = 1  #0:root 1:CandF 2:C 3:F
 
 from utils.log import logger
-logger = logger.init_loging_config("QtProjectManager","debug.log")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logger = logger.init_loging_config(os.path.join(BASE_DIR,LOG_FILE_NAME))[LOG_NUM]
+# logger = logger.init_loging_config1("QtProjectManager","debug.log")

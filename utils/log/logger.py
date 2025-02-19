@@ -20,7 +20,19 @@
 # Description：
 """
 import logging
-def init_loging_config(logger_name,file_name,level=logging.DEBUG):
+import logging.config
+import logging.handlers
+
+def init_loging_config(filename):
+    logging.config.fileConfig(filename)
+    rootHandle = logging.getLogger("root")
+    CAndFHandle = logging.getLogger("CAndFLogger")
+    consoleHandle = logging.getLogger("consoleLogger")
+    fileHandle = logging.getLogger("fileLogger")
+    _logger = rootHandle,CAndFHandle,consoleHandle,fileHandle
+    return _logger
+
+def init_loging_config1(logger_name,file_name,level=logging.DEBUG):
     formatter = logging.Formatter(fmt="%(asctime)s - %(name)s - (%(process)d:%(threadName)s:%(thread)d) "
                                       "- (%(pathname)s:%(funcName)s:%(lineno)d) - %(levelname)s - %(message)s",
                                   datefmt='%Y-%m-%d %H:%M:%S')
@@ -32,7 +44,7 @@ def init_loging_config(logger_name,file_name,level=logging.DEBUG):
     return _logger
 
 if __name__ == "__main__":
-    logger = init_loging_config("c", "bb.log")
+    logger = init_loging_config1("c", "bb.log")
 
     logger.debug('debug级别，一般用来打印一些调试信息，级别最低')
     logger.info('info级别，一般用来打印一些正常的操作信息')
