@@ -23,7 +23,7 @@
 
 from PyQt5 import QtCore
 
-from .tcp_udp_web_tools_all_in_one import Ui_TCP
+from .ui_bilibili import Ui_MainWindow
 
 class View():
 
@@ -49,7 +49,7 @@ class View():
         self.ui.show()
 
     def build_ui(self):
-        self.ui = Ui_TCP(1)
+        self.ui = Ui_MainWindow()
         self.setup_bindings()
         self.initial_datas_load()
 

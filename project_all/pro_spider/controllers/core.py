@@ -13,19 +13,14 @@
 
 """
 # File       : core.py
-# Time       ：2025.2.14 23:22
+# Time       ：2025.2.14 23:21
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-
-
 from PyQt5 import QtCore
-
-from .tcp_udp_web_tools_all_in_one import Ui_TCP
-
-class View():
+class Controller(QtCore.QObject):
 
     #### 1.定义暴露属性 ####
     # test = QtCore.pyqtProperty(int, fget=lambda self: self.ui.comboBox_test.currentIndex(),
@@ -41,46 +36,29 @@ class View():
     def test(self, value):
         return object
 
-    #### 2.初始化 ####
-    def __init__(self, model, ctrl):
-        self.ctrl = ctrl
-        super(View, self).__init__()
-        self.build_ui()
-        self.ui.show()
+    #### 2.定义signal ####
+    signal_write_msg = QtCore.pyqtSignal(str)
 
-    def build_ui(self):
-        self.ui = Ui_TCP(1)
+    #### 3.初始化 ####
+    def __init__(self, model):
+        super(Controller, self).__init__()
+        self.model = model
         self.setup_bindings()
-        self.initial_datas_load()
 
-    #### connect widget signals to event functions ####
     def setup_bindings(self):
-        pass
-        #### ui signal -----> ui slots ####
-        self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
+        #### ctrl slots <----- model signal ####
+        self.model.signal_write_msg.connect(lambda str:self.get_msg(str))
 
-        #### 可形成闭环 ####
-        #### ui signal -----? ctrl slots ####
-        self.ui.comboBox.currentIndexChanged.connect(lambda : self.ctrl.set_msg(self.ui.comboBox.currentText()))
-        #### ui slots <----- ctrl signal ####
-        self.ctrl.signal_write_msg.connect(lambda str:self.update_msg(str))
-
-    def initial_datas_load(self):
-        self.combobox_change()
-
-    #### 3.槽函数 ####
+    #### 4.槽函数 ####
     #### signal event functions ####
-    #### ui signal -----> ui slots ####
-    # 也可以以这种方式做，但是名字要对应
-    # @pyqtSlot()
-    # def on_pushButton_clicked(self):
-    #     if self.status:
-    #         self.close_proxy(True)
-    #     else:
-    #         self.set_proxy()
-    def combobox_change(self):
-        _translate = QtCore.QCoreApplication.translate
+    #### ui signal -----> ctrl slots ####
+    def set_msg(self,msg):
+        #### 修改model中的字段 ####
+        self.model.set_msg(msg)
 
-    #### ui slots <----- ctrl signal ####
-    def update_msg(self,msg):
-        print(msg)
+    #### ctrl slots <----- model signal ####
+    def get_msg(self,msg):
+        #### 从model中获得字段 ####
+        #### 发送信号至view中 ####
+        self.signal_write_msg.emit(msg)
+

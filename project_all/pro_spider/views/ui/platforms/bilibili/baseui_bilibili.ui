@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>base_bilibili</class>
+ <widget class="QWidget" name="base_bilibili">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1504</width>
+    <height>579</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>base_bilibili</string>
+  </property>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>1410</x>
+     <y>30</y>
+     <width>50</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>视频</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>12</y>
+     <width>1385</width>
+     <height>476</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_initail_setting">
+          <item>
+           <widget class="QCheckBox" name="checkBox_is_playwright">
+            <property name="text">
+             <string>playwright</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_headless">
+            <property name="text">
+             <string>headless</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_proxy_type">
+            <item>
+             <property name="text">
+              <string>none</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>kuaidaili</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_context"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_line1">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_type">
+        <item>
+         <widget class="QComboBox" name="comboBox_type">
+          <item>
+           <property name="text">
+            <string>keyword</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>bvid</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>upuser</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_type">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_keyword">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_keyword">
+              <item>
+               <widget class="QLabel" name="label_keyword">
+                <property name="text">
+                 <string>keyword:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_keyword"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_keyword">
+                <property name="text">
+                 <string>open</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_search_type">
+              <item>
+               <widget class="QCheckBox" name="checkBox_8">
+                <property name="text">
+                 <string>search_type:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_search_type">
+                <item>
+                 <property name="text">
+                  <string>all</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>video</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>bangumi</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>pgc</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>live</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>article</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>upuser</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_order_type">
+              <item>
+               <widget class="QCheckBox" name="checkBox_7">
+                <property name="text">
+                 <string>order_type:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_order_type">
+                <item>
+                 <property name="text">
+                  <string>all</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>click</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>pubdate</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>dm</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>stow</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_pubtime">
+              <item>
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>pubtime:from</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="dateEdit_pubtime_begin_s"/>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_pubtime">
+                <property name="text">
+                 <string>to</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="dateEdit_pubtime_end_s"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_duration">
+              <item>
+               <widget class="QCheckBox" name="checkBox_2">
+                <property name="text">
+                 <string>duration:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_duration">
+                <item>
+                 <property name="text">
+                  <string>all</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>&lt;10m</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>≥10m&amp;&lt;30m</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>≥30m&amp;&lt;60m</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>≥60m</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_tids">
+              <item>
+               <widget class="QCheckBox" name="checkBox_3">
+                <property name="text">
+                 <string>tids</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_tids">
+                <item>
+                 <property name="text">
+                  <string>all</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_bvid">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_bvid">
+              <item>
+               <widget class="QLabel" name="label_bvid">
+                <property name="text">
+                 <string>bvid:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_bvid"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_bvid">
+                <property name="text">
+                 <string>open</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_other_page">
+              <property name="text">
+               <string>other_page</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_upuser">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_upuser">
+              <item>
+               <widget class="QLabel" name="label_upuser">
+                <property name="text">
+                 <string>upuser:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_upuser"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_upuser">
+                <property name="text">
+                 <string>open</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_upuser_type">
+              <item>
+               <property name="text">
+                <string>home</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>dynamic</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>upload</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>lists</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>favlist</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_line4">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_download_video_comment">
+        <item>
+         <widget class="QCheckBox" name="checkBox_download_video">
+          <property name="text">
+           <string>download_video</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_download_comment">
+          <property name="text">
+           <string>download_comment</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_download_sub_comment">
+          <property name="text">
+           <string>sub_comment</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_start_stop">
+        <item>
+         <widget class="QPushButton" name="pushButton_start_search">
+          <property name="text">
+           <string>start_search</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_stop_search">
+          <property name="text">
+           <string>stop_search</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_line3">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout__video_items">
+          <item>
+           <widget class="QLabel" name="label_video_items">
+            <property name="text">
+             <string>video_items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_video_items">
+            <column>
+             <property name="text">
+              <string>keyword</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_type</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>title</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>desc</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>create_time</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>user_id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>nickname</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>avatar</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>liked_count</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_play_count</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_danmaku</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_comment</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>last_modify_ts</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_url</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>video_cover_url</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>source_keyword</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_video_upper_items">
+            <property name="text">
+             <string>video_upper_items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_2">
+            <column>
+             <property name="text">
+              <string>user_id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>nickname</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>avatar</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>last_modify_ts</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>total_fans</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>total_liked</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>user_rank</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>is_official</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_line2">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_debug">
+          <item>
+           <widget class="QLabel" name="label_logs">
+            <property name="text">
+             <string>logs</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_debug">
+            <property name="text">
+             <string>debug</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_clear">
+            <property name="text">
+             <string>clear</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_debug"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

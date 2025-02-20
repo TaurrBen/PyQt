@@ -12,20 +12,10 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : base_config.py
-# Time       ：2025.2.13 0:59
+# File       : __init__.py.py
+# Time       ：2025.2.20 17:51
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-import os
-
-PROJECTS = ["pro_example","pro_example2","pro1","pro3","pro_spider"]
-LOG_FILE_NAME = "logging.conf"
-LOG_NUM = 1  #0:root 1:CandF 2:C 3:F
-
-from utils.log import logger
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-logger = logger.init_loging_config(os.path.join(BASE_DIR,LOG_FILE_NAME))[LOG_NUM]
-# logger = logger.init_loging_config1("QtProjectManager","debug.log")
