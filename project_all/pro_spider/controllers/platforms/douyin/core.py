@@ -82,7 +82,7 @@ class DouYinCrawler(AbstractCrawler):
                     context_page=self.context_page,
                     cookie_str=config.COOKIES
                 )
-                await login_obj.begin()
+                await login_obj.begin(config.LOGIN_TYPE)
                 await self.dy_client.update_cookies(browser_context=self.browser_context)
             crawler_type_var.set(config.CRAWLER_TYPE)
             if config.CRAWLER_TYPE == "search":

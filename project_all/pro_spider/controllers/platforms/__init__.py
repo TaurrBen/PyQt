@@ -21,21 +21,27 @@
 """
 from utils.spider import AbstractCrawler
 from .bilibili import BilibiliCrawler
-# from .douyin import DouYinCrawler
-# from .kuaishou import KuaishouCrawler
-# from .tieba import TieBaCrawler
-# from .weibo import WeiboCrawler
-# from .xhs import XiaoHongShuCrawler
-# from .zhihu import ZhihuCrawler
+from .douyin import DouYinCrawler
+from .kuaishou import KuaishouCrawler
+from .tieba import TieBaCrawler
+from .weibo import WeiboCrawler
+from .xiaohongshu import XiaoHongShuCrawler
+from .zhihu import ZhihuCrawler
 
 class CrawlerFactory:
     CRAWLERS = {
-        "bili": BilibiliCrawler,
+        "bilibili": BilibiliCrawler,
+        "douyin":DouYinCrawler,
+        "kuaishou":KuaishouCrawler,
+        "tieba":TieBaCrawler,
+        "weibo":WeiboCrawler,
+        "xiaohongshu":XiaoHongShuCrawler,
+        "zhihu":ZhihuCrawler
     }
 
     @staticmethod
     def create_crawler(parent,platform: str) -> AbstractCrawler:
         crawler_class = CrawlerFactory.CRAWLERS.get(platform)
         if not crawler_class:
-            raise ValueError("Invalid Media Platform Currently only supported xhs or dy or ks or bili ...")
+            raise ValueError("Invalid Media Platform Currently only supported xiaohongshu or dy or ks or bili ...")
         return crawler_class(parent)
