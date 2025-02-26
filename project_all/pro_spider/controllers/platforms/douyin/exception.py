@@ -12,13 +12,19 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : __init__.py.py
-# Time       ：2025.2.12 4:30
+# File       : exception.py
+# Time       ：2025.2.26 22:59
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
-from .base_config import *
-from .spider_config import *
-from .db_config import *
+from httpx import RequestError
+
+
+class DataFetchError(RequestError):
+    """something error when fetch"""
+
+
+class IPBlockError(RequestError):
+    """fetch so fast that the server block us ip"""
