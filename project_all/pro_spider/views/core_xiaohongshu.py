@@ -30,9 +30,10 @@ from utils.thread.MyQThreading import AsyncioThread
 from .ui.platforms.xiaohongshu.ui_xiaohongshu import Ui_xiaohongshu
 import config
 from utils.log import *
-from ..controllers.platforms import CrawlerFactory
+from ..controllers.platforms import CrawlerFactory, XiaohongshuCrawler
 
-class View():
+
+class View_xiaohongshu():
 
     #### 1.定义暴露属性 ####
     # test = QtCore.pyqtProperty(int, fget=lambda self: self.ui.comboBox_test.currentIndex(),
@@ -49,11 +50,12 @@ class View():
         return object
 
     #### 2.初始化 ####
-    def __init__(self, model, ctrl):
-        self.ctrl = ctrl
+    def __init__(self, parent):
+        self.parent = parent
+        self.ctrl = self.parent.ctrl
         self.textBrowser_msg_handler = QTextBrowserHandler()
-        super(View, self).__init__()
-        self.build_ui(self)
+        super(View_xiaohongshu, self).__init__()
+        self.build_ui(self.parent)
         self.ui.show()
 
     def build_ui(self,parent):
@@ -161,7 +163,7 @@ class View():
         except Exception as e:
             config.logger.error(e)
         ## check params
-        if self.ctrl.crawler is None:
+        if not isinstance(self.ctrl.crawler, XiaohongshuCrawler):
             self.ctrl.crawler = CrawlerFactory.create_crawler(self, platform="xiaohongshu")
         self.ui.pushButton_video_items_export.setEnabled(False)
         self.ui.pushButton_video_upuser_items_export.setEnabled(False)

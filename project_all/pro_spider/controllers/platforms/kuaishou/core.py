@@ -21,19 +21,15 @@
 """
 
 import asyncio
-import os
-import random
 import time
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple
 
-from playwright.async_api import (BrowserContext, BrowserType, Page,
-                                  async_playwright)
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import (async_playwright, Playwright)
 
-import config
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from utils.qEvent import *
-from ..kuaishou import store as kuaishou_store
+from project_all.pro_spider.models.platforms.kuaishou import store as kuaishou_store
 from ...var import crawler_type_var, source_keyword_var,comment_tasks_var
 
 from .client import KuaiShouClient
@@ -42,29 +38,80 @@ from .login import KuaishouLogin
 
 
 class KuaishouCrawler(AbstractCrawler):
+    playwright: Playwright = None
+    browser_context: BrowserContext
     context_page: Page
     ks_client: KuaiShouClient
-    browser_context: BrowserContext
 
-    def __init__(self):
+    def __init__(self,parent = None):
+        self.parent = parent
         self.index_url = "https://www.kuaishou.com"
         self.user_agent = get_user_agent()
+        self.params = {}
 
+    def load_params(self,params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+        config.logger.info("[KuaishouCrawler.search] Begin search kuaishou keywords")
+        ks_limit_count = 20  # kuaishou limit page fixed value
+        if config.CRAWLER_MAX_NOTES_COUNT < ks_limit_count:
+            config.CRAWLER_MAX_NOTES_COUNT = ks_limit_count
+        start_page = config.START_PAGE
+        for keyword in config.KEYWORDS.split(","):
+            source_keyword_var.set(keyword)
+            config.logger.info(f"[KuaishouCrawler.search] Current search keyword: {keyword}")
+            page = 1
+            while (page - start_page + 1) * ks_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+                if page < start_page:
+                    config.logger.info(f"[KuaishouCrawler.search] Skip page: {page}")
+                    page += 1
+                    continue
+                config.logger.info(f"[KuaishouCrawler.search] search kuaishou keyword: {keyword}, page: {page}")
+                video_id_list: List[str] = []
+                videos_res = await self.ks_client.search_info_by_keyword(
+                    keyword=keyword,
+                    pcursor=str(page),
+                )
+                if not videos_res:
+                    config.logger.error(f"[KuaishouCrawler.search] search info by keyword:{keyword} not found data")
+                    continue
+
+                vision_search_photo: Dict = videos_res.get("visionSearchPhoto")
+                if vision_search_photo.get("result") != 1:
+                    config.logger.error(f"[KuaishouCrawler.search] search info by keyword:{keyword} not found data ")
+                    continue
+
+                for video_detail in vision_search_photo.get("feeds"):
+                    video_id_list.append(video_detail.get("photo", {}).get("id"))
+                    await kuaishou_store.update_kuaishou_video(video_item=video_detail)
+
+                # batch fetch video comments
+                page += 1
+                await self.batch_get_video_comments(video_id_list)
+        config.logger.info("[KuaishouCrawler.start] Kuaishou Crawler finished ...")
     async def start(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(config.IP_PROXY_POOL_COUNT, enable_validate_ip=True)
             ip_proxy_info: IpInfoModel = await ip_proxy_pool.get_proxy()
             playwright_proxy_format, httpx_proxy_format = self.format_proxy_info(ip_proxy_info)
 
-        async with async_playwright() as playwright:
+        self.playwright = Playwright(await async_playwright().start())
+        # async with async_playwright() as playwright:
+        if True:
             # Launch a browser context.
-            chromium = playwright.chromium
             self.browser_context = await self.launch_browser(
-                chromium,
+                self.playwright.chromium,
                 None,
                 self.user_agent,
-                headless=config.HEADLESS
+                headless=self.params.get("headless")
             )
             # stealth.min.js is a js script to prevent the website from detecting the crawler.
             await self.browser_context.add_init_script(path="libs/stealth.min.js")
@@ -76,7 +123,7 @@ class KuaishouCrawler(AbstractCrawler):
             if not await self.ks_client.pong():
                 login_obj = KuaishouLogin(
                     login_type=config.LOGIN_TYPE,
-                    login_phone=httpx_proxy_format,
+                    login_phone="",
                     browser_context=self.browser_context,
                     context_page=self.context_page,
                     cookie_str=config.COOKIES
@@ -85,19 +132,45 @@ class KuaishouCrawler(AbstractCrawler):
                 await self.ks_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for videos and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_videos()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their videos and comments
-                await self.get_creators_and_videos()
-            else:
-                pass
+            config.logger.info("[KilibiliCrawler.start] Kuaishou Crawler Ready ...")
+            event = ViewDataEvent("textBrowser_context", None, self.ks_client.headers,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("textBrowser_cookies", None, self.ks_client.cookie_dict,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for videos and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_videos()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their videos and comments
+            #     await self.get_creators_and_videos()
+            # else:
+            #     pass
 
-            config.logger.info("[KuaishouCrawler.start] Kuaishou Crawler finished ...")
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self):
         config.logger.info("[KuaishouCrawler.search] Begin search kuaishou keywords")
@@ -228,7 +301,7 @@ class KuaishouCrawler(AbstractCrawler):
     async def create_ks_client(self, httpx_proxy: Optional[str]) -> KuaiShouClient:
         """Create ks client"""
         config.logger.info("[KuaishouCrawler.create_ks_client] Begin create kuaishou API client ...")
-        cookie_str, cookie_dict = config.convert_cookies(await self.browser_context.cookies())
+        cookie_str, cookie_dict = convert_cookies(await self.browser_context.cookies())
         ks_client_obj = KuaiShouClient(
             proxies=httpx_proxy,
             headers={
@@ -253,8 +326,8 @@ class KuaishouCrawler(AbstractCrawler):
         """Launch browser and create browser context"""
         config.logger.info("[KuaishouCrawler.launch_browser] Begin create browser context ...")
         if config.SAVE_LOGIN_STATE:
-            user_data_dir = os.path.join(os.getcwd(), "browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+            user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
+                                         config.USER_DATA_DIR % "kuaishou")  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",
                 user_data_dir=user_data_dir,

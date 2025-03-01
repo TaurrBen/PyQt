@@ -21,18 +21,14 @@
 """
 
 import asyncio
-import json
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Union
 from urllib.parse import urlencode
 
-import httpx
-from playwright.async_api import BrowserContext
-from tenacity import RetryError, retry, stop_after_attempt, wait_fixed
+from tenacity import RetryError
 
-import config
 from utils import time_utils
 from utils.spider import *
-from .store.m_tieba import TiebaComment, TiebaCreator, TiebaNote
+from project_all.pro_spider.models.platforms.tieba.m_tieba import TiebaComment, TiebaNote
 
 from .field import SearchNoteType, SearchSortType
 from .help import TieBaExtractor
@@ -54,6 +50,7 @@ class BaiduTieBaClient(AbstractApiClient):
         self._host = "https://tieba.baidu.com"
         self._page_extractor = TieBaExtractor()
         self.default_ip_proxy = default_ip_proxy
+        self.cookie_dict = None
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
     async def request(self, method, url, return_ori_content=False, proxies=None, **kwargs) -> Union[str, Any]:

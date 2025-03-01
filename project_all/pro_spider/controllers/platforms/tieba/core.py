@@ -20,45 +20,84 @@
 # Description：
 """
 
-import asyncio
-import os
-import random
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple
 
-from playwright.async_api import (BrowserContext, BrowserType, Page,
-                                  async_playwright)
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import Playwright
 
-import config
-from .store import *
-import config
+from project_all.pro_spider.models.platforms.tieba.store import *
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from utils.qEvent import *
-from ..tieba import store as tieba_store
+from project_all.pro_spider.models.platforms.tieba import store as tieba_store
 from ...var import crawler_type_var, source_keyword_var
 
 from .client import BaiduTieBaClient
 from .field import SearchNoteType, SearchSortType
 from .help import TieBaExtractor
-from .login import BaiduTieBaLogin
 
 
-class TieBaCrawler(AbstractCrawler):
-    context_page: Page
-    tieba_client: BaiduTieBaClient
-    browser_context: BrowserContext
+class TiebaCrawler(AbstractCrawler):
+    playwright: Playwright = None
+    browser_context: BrowserContext = None
+    context_page: Page = None
+    tieba_client: BaiduTieBaClient = None
 
-    def __init__(self) -> None:
+    def __init__(self,parent = None) -> None:
+        self.parent = parent
         self.index_url = "https://tieba.baidu.com"
         self.user_agent = get_user_agent()
         self._page_extractor = TieBaExtractor()
+        self.params = {}
 
+    def load_params(self,params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+        config.logger.info("[BaiduTieBaCrawler.search] Begin search baidu tieba keywords")
+        tieba_limit_count = 10  # tieba limit page fixed value
+        if config.CRAWLER_MAX_NOTES_COUNT < tieba_limit_count:
+            config.CRAWLER_MAX_NOTES_COUNT = tieba_limit_count
+        start_page = config.START_PAGE
+        for keyword in config.KEYWORDS.split(","):
+            source_keyword_var.set(keyword)
+            config.logger.info(f"[BaiduTieBaCrawler.search] Current search keyword: {keyword}")
+            page = 1
+            while (page - start_page + 1) * tieba_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+                if page < start_page:
+                    config.logger.info(f"[BaiduTieBaCrawler.search] Skip page {page}")
+                    page += 1
+                    continue
+                try:
+                    config.logger.info(f"[BaiduTieBaCrawler.search] search tieba keyword: {keyword}, page: {page}")
+                    notes_list: List[TiebaNote] = await self.tieba_client.get_notes_by_keyword(
+                        keyword=keyword,
+                        page=page,
+                        page_size=tieba_limit_count,
+                        sort=SearchSortType.TIME_DESC,
+                        note_type=SearchNoteType.FIXED_THREAD
+                    )
+                    if not notes_list:
+                        config.logger.info(f"[BaiduTieBaCrawler.search] Search note list is empty")
+                        break
+                    config.logger.info(f"[BaiduTieBaCrawler.search] Note list len: {len(notes_list)}")
+                    await self.get_specified_notes(note_id_list=[note_detail.note_id for note_detail in notes_list])
+                    page += 1
+                except Exception as ex:
+                    config.logger.error(
+                        f"[BaiduTieBaCrawler.search] Search keywords error, current page: {page}, current keyword: {keyword}, err: {ex}")
+                    break
+        config.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler finished ...")
     async def start(self) -> None:
         """
         Start the crawler
         Returns:
 
         """
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
         ip_proxy_pool, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             config.logger.info("[BaiduTieBaCrawler.start] Begin create ip proxy pool ...")
@@ -73,20 +112,45 @@ class TieBaCrawler(AbstractCrawler):
             default_ip_proxy=httpx_proxy_format,
         )
         crawler_type_var.set(config.CRAWLER_TYPE)
-        if config.CRAWLER_TYPE == "search":
-            # Search for notes and retrieve their comment information.
-            await self.search()
-            await self.get_specified_tieba_notes()
-        elif config.CRAWLER_TYPE == "detail":
-            # Get the information and comments of the specified post
-            await self.get_specified_notes()
-        elif config.CRAWLER_TYPE == "creator":
-            # Get creator's information and their notes and comments
-            await self.get_creators_and_notes()
-        else:
-            pass
-
-        config.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler finished ...")
+        config.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler Ready ...")
+        event = ViewDataEvent("textBrowser_context", None, self.tieba_client.headers,
+                              "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        # event = ViewDataEvent("textBrowser_cookies", None, self.tieba_client.cookie_dict,
+        #                       "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+        # QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        # if config.CRAWLER_TYPE == "search":
+        #     # Search for notes and retrieve their comment information.
+        #     await self.search()
+        #     await self.get_specified_tieba_notes()
+        # elif config.CRAWLER_TYPE == "detail":
+        #     # Get the information and comments of the specified post
+        #     await self.get_specified_notes()
+        # elif config.CRAWLER_TYPE == "creator":
+        #     # Get creator's information and their notes and comments
+        #     await self.get_creators_and_notes()
+        # else:
+        #     pass
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self) -> None:
         """
@@ -296,8 +360,8 @@ class TieBaCrawler(AbstractCrawler):
         if config.SAVE_LOGIN_STATE:
             # feat issue #14
             # we will save login state to avoid login every time
-            user_data_dir = os.path.join(os.getcwd(), "browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+            user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
+                                         config.USER_DATA_DIR % tieba)  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 user_data_dir=user_data_dir,
                 accept_downloads=True,

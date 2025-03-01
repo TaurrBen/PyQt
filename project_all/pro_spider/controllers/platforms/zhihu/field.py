@@ -21,9 +21,8 @@
 """
 
 from enum import Enum
-from typing import NamedTuple
 
-from constant import zhihu as zhihu_constant
+from project_all.pro_spider.models.platforms.zhihu import constant as zhihu_constant
 
 
 class SearchTime(Enum):

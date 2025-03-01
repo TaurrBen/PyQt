@@ -20,21 +20,17 @@
 # Description：
 """
 import asyncio
-import os
-import random
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple, Union, overload
+from typing import Union
 from datetime import datetime, timedelta
 import pandas as pd
-from PyQt5.QtCore import QCoreApplication, QObject
+from PyQt5.QtCore import QCoreApplication
 
-from playwright.async_api import (BrowserContext, BrowserType, Page, async_playwright, Playwright,
-                                  PlaywrightContextManager)
+from playwright.async_api import (async_playwright, Playwright)
 
-import config
 from utils.spider import *
 from utils.qEvent import *
-from ..bilibili import store as bilibili_store
+from project_all.pro_spider.models.platforms.bilibili import store as bilibili_store
 from ...var import crawler_type_var, source_keyword_var
 
 from .client import BilibiliClient
@@ -49,8 +45,7 @@ class BilibiliCrawler(AbstractCrawler):
     context_page: Page = None
     bili_client: BilibiliClient = None
 
-
-    def __init__(self,parent):
+    def __init__(self,parent = None):
         super(BilibiliCrawler, self).__init__()
         self.parent = parent
         self.index_url = "https://www.bilibili.com"
@@ -67,8 +62,11 @@ class BilibiliCrawler(AbstractCrawler):
         :return:
         """
         config.logger.info("[BilibiliCrawler.search] Begin search bilibli keywords")
-        bili_limit_count = 20 # bilibili limit page fixed value Max36
         if self.params:
+            bili_limit_count = 20  # bilibili limit page fixed value Max36
+            if config.CRAWLER_MAX_NOTES_COUNT < bili_limit_count:
+                config.CRAWLER_MAX_NOTES_COUNT = bili_limit_count
+            start_page = self.params.get("start_page")[1]  # start page number
             event = ViewDataEvent("pushButton_load_params", None, None,
                                   "qwidget.setEnabled(False)")
             QCoreApplication.postEvent(self.parent.ui, event)
@@ -87,7 +85,7 @@ class BilibiliCrawler(AbstractCrawler):
                     pubtime_begin_s, pubtime_end_s = await self.get_pubtime_datetime(start=day.strftime('%Y-%m-%d'),
                                                                                      end=day.strftime('%Y-%m-%d'))
                     page = 1
-                    while (page - self.params.get("start_page")[1] + 1) * bili_limit_count <= self.params.get("video_count"):
+                    while (page - start_page + 1) * bili_limit_count <= self.params.get("video_count"):
                         # ! Catch any error if response return nothing, go to next day
                         try:
                             config.logger.info(
@@ -224,6 +222,7 @@ class BilibiliCrawler(AbstractCrawler):
         event = ViewDataEvent("pushButton_stop_search", None, None,
                               "qwidget.setEnabled(False)")
         QCoreApplication.postEvent(self.parent.ui, event)
+
     async def get_pubtime_datetime(self, start: str = config.START_DAY, end: str = config.END_DAY) -> tuple[str, str]:
         """
         获取 bilibili 作品发布日期起始时间戳 pubtime_begin_s 与发布日期结束时间戳 pubtime_end_s
@@ -552,14 +551,14 @@ class BilibiliCrawler(AbstractCrawler):
             # feat issue #14
             # we will save login state to avoid login every time
             user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+                                         config.USER_DATA_DIR % "bilibili")  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",
                 user_data_dir=user_data_dir,
                 accept_downloads=True,
                 headless=headless,
                 proxy=playwright_proxy,  # type: ignore
-                viewport={"width": 640, "height": 480},
+                viewport={"width": 1920, "height": 1080},
                 user_agent=user_agent
             )
             return browser_context

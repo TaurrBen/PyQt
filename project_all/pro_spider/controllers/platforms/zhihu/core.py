@@ -19,19 +19,16 @@
 # version    ：python 3.9
 # Description：
 """
-import asyncio
-import os
-import random
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple, cast
+from typing import cast
 
-from playwright.async_api import (BrowserContext, BrowserType, Page,
-                                  async_playwright)
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import (async_playwright, Playwright)
 
-import config
-from constant import *
-from .store.m_zhihu import *
-from ..zhihu import store as zhihu_store
+from project_all.pro_spider.models.platforms.zhihu.constant import *
+from project_all.pro_spider.models.platforms.zhihu.store import *
+from project_all.pro_spider.models.platforms.zhihu import store as zhihu_store
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
 from ...var import crawler_type_var, source_keyword_var
 
@@ -42,15 +39,84 @@ from .login import ZhiHuLogin
 
 
 class ZhihuCrawler(AbstractCrawler):
-    context_page: Page
-    zhihu_client: ZhiHuClient
-    browser_context: BrowserContext
+    playwright: Playwright = None
+    browser_context: BrowserContext = None
+    context_page: Page = None
+    bili_client: ZhiHuClient = None
 
-    def __init__(self) -> None:
+    def __init__(self,parent = None) -> None:
         self.index_url = "https://www.zhihu.com"
         # self.user_agent = get_user_agent()
         self.user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
         self._extractor = ZhihuExtractor()
+        self.parent = parent
+        self.params = {}
+    def load_params(self,params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+
+        if self.params:
+            config.logger.info("[ZhihuCrawler.search] Begin search zhihu keywords")
+            zhihu_limit_count = 20  # zhihu limit page fixed value
+            if config.CRAWLER_MAX_NOTES_COUNT < zhihu_limit_count:
+                config.CRAWLER_MAX_NOTES_COUNT = zhihu_limit_count
+            start_page = self.params.get("start_page")[1]  # start page number
+            event = ViewDataEvent("pushButton_load_params", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            for keyword in config.KEYWORDS.split(","):
+                source_keyword_var.set(keyword)
+                config.logger.info(f"[ZhihuCrawler.search] Current search keyword: {keyword}")
+                page = 1
+                while (page - start_page + 1) * zhihu_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+                    if page < start_page:
+                        config.logger.info(f"[ZhihuCrawler.search] Skip page {page}")
+                        page += 1
+                        continue
+
+                    try:
+                        config.logger.info(f"[ZhihuCrawler.search] search zhihu keyword: {keyword}, page: {page}")
+                        content_list: List[ZhihuContent] = await self.zhihu_client.get_note_by_keyword(
+                            keyword=keyword,
+                            page=page,
+                        )
+                        config.logger.info(f"[ZhihuCrawler.search] Search contents :{content_list}")
+                        if not content_list:
+                            config.logger.info("No more content!")
+                            break
+
+                        page += 1
+                        for content in content_list:
+                            await zhihu_store.update_zhihu_content(content)
+
+                        await self.batch_get_content_comments(content_list)
+                    except DataFetchError:
+                        config.logger.error("[ZhihuCrawler.search] Search content error")
+                        return
+        config.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_video_items_export", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_video_upuser_items_export", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def start(self) -> None:
         """
@@ -58,17 +124,22 @@ class ZhihuCrawler(AbstractCrawler):
         Returns:
 
         """
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(config.IP_PROXY_POOL_COUNT, enable_validate_ip=True)
             ip_proxy_info: IpInfoModel = await ip_proxy_pool.get_proxy()
             playwright_proxy_format, httpx_proxy_format = self.format_proxy_info(ip_proxy_info)
 
-        async with async_playwright() as playwright:
+        self.playwright = Playwright(await async_playwright().start())
+        # async with async_playwright() as playwright:
+        if True:
             # Launch a browser context.
-            chromium = playwright.chromium
             self.browser_context = await self.launch_browser(
-                chromium,
+                self.playwright.chromium,
                 None,
                 self.user_agent,
                 headless=config.HEADLESS
@@ -89,7 +160,7 @@ class ZhihuCrawler(AbstractCrawler):
                     context_page=self.context_page,
                     cookie_str=config.COOKIES
                 )
-                await login_obj.begin()
+                await login_obj.begin(config.LOGIN_TYPE)
                 await self.zhihu_client.update_cookies(browser_context=self.browser_context)
 
             # 知乎的搜索接口需要打开搜索页面之后cookies才能访问API，单独的首页不行
@@ -99,19 +170,45 @@ class ZhihuCrawler(AbstractCrawler):
             await self.zhihu_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for notes and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_notes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their notes and comments
-                await self.get_creators_and_notes()
-            else:
-                pass
+            config.logger.info("[ZhihuCrawler.start] Zhihu Crawler Ready ...")
+            event = ViewDataEvent("textBrowser_context", None, self.zhihu_client.headers,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("textBrowser_cookies", None, self.zhihu_client.cookie_dict,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
 
-            config.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for notes and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_notes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their notes and comments
+            #     await self.get_creators_and_notes()
+            # else:
+            #     pass
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self) -> None:
         """Search for notes and retrieve their comment information."""
@@ -353,8 +450,8 @@ class ZhihuCrawler(AbstractCrawler):
         if config.SAVE_LOGIN_STATE:
             # feat issue #14
             # we will save login state to avoid login every time
-            user_data_dir = os.path.join(os.getcwd(), "browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+            user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
+                                         config.USER_DATA_DIR % "zhihu")  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",
                 user_data_dir=user_data_dir,

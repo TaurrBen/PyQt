@@ -22,9 +22,9 @@
 import csv
 import sys
 
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QObject
-from PyQt5.QtWidgets import QApplication, QWidget, QTableWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QTableWidgetItem, QFileDialog, QMessageBox
 
 import config
 from .baseui_kuaishou import Ui_baseui_kuaishou
@@ -168,7 +168,21 @@ class Ui_kuaishou(QWidget,Ui_baseui_kuaishou):
                     exec(event.callback_name)
                 return True
         return QWidget.event(self,event)
-
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        # 弹出确认对话框
+        reply = QMessageBox.question(
+            self,
+            "确认关闭",
+            "你确定要关闭窗口吗？",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        # 根据用户选择决定是否关闭窗口
+        if reply == QMessageBox.Yes:
+            event.accept()  # 接受关闭事件，窗口关闭
+            self.parent.ui.show()
+        else:
+            event.ignore()  # 忽略关闭事件，窗口保持打开
 
 def main():
     app = QApplication(sys.argv)

@@ -43,11 +43,12 @@ class QtProjectManager(QMainWindow,Ui_QtProjectManager):
     ## 槽函数
     def on_pushButton(self):
         pro = "project_all."+self.comboBox.currentText()
-        # try:
-        myModule = importlib.import_module(pro)
-        mainWindow = myModule.MainWindow(pro)
-        # except Exception as e:
-        #     config.logger.error(e)
+        try:
+            myModule = importlib.import_module(pro)
+            mainWindow = myModule.MainWindow(pro)
+            config.logger.info(f"open {pro} success.")
+        except Exception as e:
+            config.logger.error(e)
     ##
     def translate(self):
         _translate = QCoreApplication.translate

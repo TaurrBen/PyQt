@@ -21,7 +21,7 @@
 """
 import sys
 
-from baseui_spider import Ui_baseui_spider
+from .baseui_spider import Ui_baseui_spider
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -33,19 +33,8 @@ class Ui_spider(QMainWindow,Ui_baseui_spider):
         super(Ui_spider, self).__init__()
         self.setupUi(self)
         self.initialUi()
-
     def initialUi(self):
         pass
 
-
-
-def main():
-    app = QApplication(sys.argv)
-    ui = Ui_spider()
-    ui.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
-
+    def btn_clicked(self, func_name):
+        self.pushButton.clicked.connect(func_name)

@@ -19,10 +19,11 @@
 # version    ：python 3.9
 # Description：
 """
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, ABCMeta
 from typing import Dict, Optional
-from playwright.async_api import BrowserContext, BrowserType
 
+from PyQt5.QtWidgets import QWidget
+from playwright.async_api import BrowserContext, BrowserType
 
 class AbstractCrawler(ABC):
     @abstractmethod
@@ -52,8 +53,7 @@ class AbstractCrawler(ABC):
         """
         pass
 
-    @abstractmethod
-    def load_params(self, params):
+    def load_params(self, params:Dict):
         pass
 
 

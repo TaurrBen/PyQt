@@ -20,15 +20,12 @@
 # Description：
 """
 import html
-import json
-import re
-from typing import Dict, List, Tuple
 from urllib.parse import parse_qs, unquote
 
 from parsel import Selector
 
-from .constant import *
-from .store.m_tieba import *
+from project_all.pro_spider.models.platforms.tieba.constant import *
+from project_all.pro_spider.models.platforms.tieba.m_tieba import *
 from utils.spider import *
 
 GENDER_MALE = "sex_male"

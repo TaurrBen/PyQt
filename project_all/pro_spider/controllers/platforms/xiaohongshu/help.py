@@ -21,12 +21,10 @@
 """
 
 import ctypes
-import json
-import random
 import time
 import urllib.parse
 
-from .store.m_xiaohongshu import NoteUrlInfo
+from project_all.pro_spider.models.platforms.xiaohongshu.m_xiaohongshu import NoteUrlInfo
 from utils.spider import *
 
 

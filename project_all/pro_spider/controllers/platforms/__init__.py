@@ -23,9 +23,9 @@ from utils.spider import AbstractCrawler
 from .bilibili import BilibiliCrawler
 from .douyin import DouYinCrawler
 from .kuaishou import KuaishouCrawler
-from .tieba import TieBaCrawler
+from .tieba import TiebaCrawler
 from .weibo import WeiboCrawler
-from .xiaohongshu import XiaoHongShuCrawler
+from .xiaohongshu import XiaohongshuCrawler
 from .zhihu import ZhihuCrawler
 
 class CrawlerFactory:
@@ -33,9 +33,9 @@ class CrawlerFactory:
         "bilibili": BilibiliCrawler,
         "douyin":DouYinCrawler,
         "kuaishou":KuaishouCrawler,
-        "tieba":TieBaCrawler,
+        "tieba":TiebaCrawler,
         "weibo":WeiboCrawler,
-        "xiaohongshu":XiaoHongShuCrawler,
+        "xiaohongshu":XiaohongshuCrawler,
         "zhihu":ZhihuCrawler
     }
 

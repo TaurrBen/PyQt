@@ -28,11 +28,11 @@ import httpx
 from playwright.async_api import BrowserContext, Page
 
 import config
-from base.base_crawler import AbstractApiClient
-from tools import utils
+import config
+from utils.spider import *
 
 from .exception import DataFetchError
-from .graphql import KuaiShouGraphQL
+from .help import KuaiShouGraphQL
 
 
 class KuaiShouClient(AbstractApiClient):
@@ -79,7 +79,7 @@ class KuaiShouClient(AbstractApiClient):
 
     async def pong(self) -> bool:
         """get a note to check if login state is ok"""
-        utils.logger.info("[KuaiShouClient.pong] Begin pong kuaishou...")
+        config.logger.info("[KuaiShouClient.pong] Begin pong kuaishou...")
         ping_flag = False
         try:
             post_data = {
@@ -93,12 +93,12 @@ class KuaiShouClient(AbstractApiClient):
             if res.get("visionProfileUserList", {}).get("result") == 1:
                 ping_flag = True
         except Exception as e:
-            utils.logger.error(f"[KuaiShouClient.pong] Pong kuaishou failed: {e}, and try to login again...")
+            config.logger.error(f"[KuaiShouClient.pong] Pong kuaishou failed: {e}, and try to login again...")
             ping_flag = False
         return ping_flag
 
     async def update_cookies(self, browser_context: BrowserContext):
-        cookie_str, cookie_dict = utils.convert_cookies(await browser_context.cookies())
+        cookie_str, cookie_dict = convert_cookies(await browser_context.cookies())
         self.headers["Cookie"] = cookie_str
         self.cookie_dict = cookie_dict
 
@@ -247,7 +247,7 @@ class KuaiShouClient(AbstractApiClient):
 
         """
         if not config.ENABLE_GET_SUB_COMMENTS:
-            utils.logger.info(
+            config.logger.info(
                 f"[KuaiShouClient.get_comments_all_sub_comments] Crawling sub_comment mode is not enabled"
             )
             return []
@@ -309,7 +309,7 @@ class KuaiShouClient(AbstractApiClient):
         while pcursor != "no_more":
             videos_res = await self.get_video_by_creater(user_id, pcursor)
             if not videos_res:
-                utils.logger.error(
+                config.logger.error(
                     f"[KuaiShouClient.get_all_videos_by_creator] The current creator may have been banned by ks, so they cannot access the data."
                 )
                 break
@@ -318,7 +318,7 @@ class KuaiShouClient(AbstractApiClient):
             pcursor = vision_profile_photo_list.get("pcursor", "")
 
             videos = vision_profile_photo_list.get("feeds", [])
-            utils.logger.info(
+            config.logger.info(
                 f"[KuaiShouClient.get_all_videos_by_creator] got user_id:{user_id} videos len : {len(videos)}"
             )
 

@@ -24,12 +24,15 @@ from .controllers.core import Controller
 from .views.core import View
 
 class MainWindow():
-    def __init__(self, name):
+    def __init__(self,name):
         super(MainWindow, self).__init__()
         self.model = Model()
         self.ctrl = Controller(self.model)
         self.view = View(self.model, self.ctrl)
 
         import config
+        config.LOG_NUM = 1
+        config.logger = config.all_logger[config.LOG_NUM]
         config.logger.info("Hi,{}!".format(name))
         print("Hi,{}!".format(name))
+

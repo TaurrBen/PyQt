@@ -21,19 +21,16 @@
 """
 
 import asyncio
-import os
-import random
 import time
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple
+from typing import Dict
 
-from playwright.async_api import BrowserContext, BrowserType, Page, async_playwright
-from tenacity import RetryError
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import async_playwright, Playwright
 
-import config
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from utils.qEvent import *
-from ..xiaohongshu import store as xiaohongshu_store
+from project_all.pro_spider.models.platforms.xiaohongshu import store as xiaohongshu_store
 from ...var import crawler_type_var, source_keyword_var
 
 from .client import XiaoHongShuClient
@@ -43,17 +40,112 @@ from .help import parse_note_info_from_note_url, get_search_id
 from .login import XiaoHongShuLogin
 
 
-class XiaoHongShuCrawler(AbstractCrawler):
-    context_page: Page
-    xhs_client: XiaoHongShuClient
-    browser_context: BrowserContext
-
-    def __init__(self) -> None:
+class XiaohongshuCrawler(AbstractCrawler):
+    playwright: Playwright = None
+    browser_context: BrowserContext = None
+    context_page: Page = None
+    bili_client: XiaoHongShuClient = None
+    def __init__(self,parent = None) -> None:
         self.index_url = "https://www.xiaohongshu.com"
         # self.user_agent = get_user_agent()
         self.user_agent = config.UA if config.UA else "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+        self.parent = parent
+        self.params = {}
+    def load_params(self,params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+        config.logger.info(
+            "[XiaoHongShuCrawler.search] Begin search xiaohongshu keywords"
+        )
+        if self.params:
+            xhs_limit_count = 20  # xhs limit page fixed value
+            if config.CRAWLER_MAX_NOTES_COUNT < xhs_limit_count:
+                config.CRAWLER_MAX_NOTES_COUNT = xhs_limit_count
+            start_page = self.params.get("start_page")[1]  # start page number
+            event = ViewDataEvent("pushButton_load_params", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            for keyword in self.params.get("keyword"):
+                source_keyword_var.set(keyword)
+                config.logger.info(
+                    f"[XiaoHongShuCrawler.search] Current search keyword: {keyword}"
+                )
+                page = 1
+                search_id = get_search_id()
+                while (
+                        page - start_page + 1
+                ) * xhs_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+                    if page < start_page:
+                        config.logger.info(f"[XiaoHongShuCrawler.search] Skip page {page}")
+                        page += 1
+                        continue
+
+                    try:
+                        config.logger.info(
+                            f"[XiaoHongShuCrawler.search] search xhs keyword: {keyword}, page: {page}"
+                        )
+                        note_ids: List[str] = []
+                        xsec_tokens: List[str] = []
+                        notes_res = await self.xhs_client.get_note_by_keyword(
+                            keyword=keyword,
+                            search_id=search_id,
+                            page=page,
+                            sort=(
+                                SearchSortType(config.SORT_TYPE)
+                                if config.SORT_TYPE != ""
+                                else SearchSortType.GENERAL
+                            ),
+                        )
+                        config.logger.info(
+                            f"[XiaoHongShuCrawler.search] Search notes res:{notes_res}"
+                        )
+                        if not notes_res or not notes_res.get("has_more", False):
+                            config.logger.info("No more content!")
+                            break
+                        semaphore = asyncio.Semaphore(config.MAX_CONCURRENCY_NUM)
+                        task_list = [
+                            self.get_note_detail_async_task(
+                                note_id=post_item.get("id"),
+                                xsec_source=post_item.get("xsec_source"),
+                                xsec_token=post_item.get("xsec_token"),
+                                semaphore=semaphore,
+                            )
+                            for post_item in notes_res.get("items", {})
+                            if post_item.get("model_type") not in ("rec_query", "hot_query")
+                        ]
+                        note_details = await asyncio.gather(*task_list)
+                        for note_detail in note_details:
+                            if note_detail:
+                                await xiaohongshu_store.update_xhs_note(note_detail)
+                                await self.get_notice_media(note_detail)
+                                note_ids.append(note_detail.get("note_id"))
+                                xsec_tokens.append(note_detail.get("xsec_token"))
+                        page += 1
+                        config.logger.info(
+                            f"[XiaoHongShuCrawler.search] Note details: {note_details}"
+                        )
+                        await self.batch_get_note_comments(note_ids, xsec_tokens)
+                    except DataFetchError:
+                        config.logger.error(
+                            "[XiaoHongShuCrawler.search] Get note detail error"
+                        )
+                        break
+        config.logger.info("[XiaoHongShuCrawler.start] Xhs Crawler finished ...")
 
     async def start(self) -> None:
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(
@@ -64,11 +156,12 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 ip_proxy_info
             )
 
-        async with async_playwright() as playwright:
+        self.playwright = Playwright(await async_playwright().start())
+        # async with async_playwright() as playwright:
+        if True:
             # Launch a browser context.
-            chromium = playwright.chromium
             self.browser_context = await self.launch_browser(
-                chromium, None, self.user_agent, headless=config.HEADLESS
+                self.playwright.chromium, None, self.user_agent, headless=config.HEADLESS
             )
             # stealth.min.js is a js script to prevent the website from detecting the crawler.
             await self.browser_context.add_init_script(path="libs/stealth.min.js")
@@ -102,19 +195,45 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 )
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for notes and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_notes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their notes and comments
-                await self.get_creators_and_notes()
-            else:
-                pass
+            config.logger.info("[BilibiliCrawler.start] Bilibili Crawler Ready ...")
+            event = ViewDataEvent("textBrowser_context", None, self.xhs_client.headers,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("textBrowser_cookies", None, self.xhs_client.cookie_dict,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for notes and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_notes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their notes and comments
+            #     await self.get_creators_and_notes()
+            # else:
+            #     pass
 
-            config.logger.info("[XiaoHongShuCrawler.start] Xhs Crawler finished ...")
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self) -> None:
         """Search for notes and retrieve their comment information."""
@@ -439,7 +558,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
             # feat issue #14
             # we will save login state to avoid login every time
             user_data_dir = os.path.join(
-                os.getcwd(), "browser_data", config.USER_DATA_DIR % config.PLATFORM
+                os.getcwd(), "data/spider/browser_data", config.USER_DATA_DIR % "xiaohongshu"
             )  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",

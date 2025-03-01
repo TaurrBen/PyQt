@@ -20,18 +20,13 @@
 # Description：
 """
 import asyncio
-import json
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Union
 from urllib.parse import urlencode
 
-import httpx
 from httpx import Response
-from playwright.async_api import BrowserContext, Page
-from tenacity import retry, stop_after_attempt, wait_fixed
 
-import config
-from .constant import *
-from .store.m_zhihu import ZhihuComment, ZhihuContent, ZhihuCreator
+from project_all.pro_spider.models.platforms.zhihu.constant import *
+from project_all.pro_spider.models.platforms.zhihu.store import ZhihuComment, ZhihuContent, ZhihuCreator
 from utils.spider import *
 
 from .exception import DataFetchError, ForbiddenError
@@ -51,7 +46,7 @@ class ZhiHuClient(AbstractApiClient):
     ):
         self.proxies = proxies
         self.timeout = timeout
-        self.default_headers = headers
+        self.headers = headers
         self.cookie_dict = cookie_dict
         self._extractor = ZhihuExtractor()
 
@@ -66,8 +61,8 @@ class ZhiHuClient(AbstractApiClient):
         d_c0 = self.cookie_dict.get("d_c0")
         if not d_c0:
             raise Exception("d_c0 not found in cookies")
-        sign_res = sign(url, self.default_headers["cookie"])
-        headers = self.default_headers.copy()
+        sign_res = sign(url, self.headers["cookie"])
+        headers = self.headers.copy()
         headers['x-zst-81'] = sign_res["x-zst-81"]
         headers['x-zse-96'] = sign_res["x-zse-96"]
         return headers
@@ -166,7 +161,7 @@ class ZhiHuClient(AbstractApiClient):
 
         """
         cookie_str, cookie_dict = convert_cookies(await browser_context.cookies())
-        self.default_headers["cookie"] = cookie_str
+        self.headers["cookie"] = cookie_str
         self.cookie_dict = cookie_dict
 
     async def get_current_user_info(self) -> Dict:

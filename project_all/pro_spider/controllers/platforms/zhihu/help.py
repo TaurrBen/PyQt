@@ -19,15 +19,13 @@
 # version    ：python 3.9
 # Description：
 """
-import json
-from typing import Dict, List, Optional
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs
 
 import execjs
 from parsel import Selector
 
-from .constant import *
-from .store.m_zhihu import ZhihuComment, ZhihuContent, ZhihuCreator
+from project_all.pro_spider.models.platforms.zhihu.constant import *
+from project_all.pro_spider.models.platforms.zhihu.store import ZhihuComment, ZhihuContent, ZhihuCreator
 from utils.spider import *
 
 ZHIHU_SGIN_JS = None

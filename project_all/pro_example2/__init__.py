@@ -31,5 +31,7 @@ class MainWindow():
         self.view = View(self.model, self.ctrl)
 
         import config
+        config.LOG_NUM = 3
+        config.logger = config.all_logger[config.LOG_NUM]
         config.logger.info("Hi,{}!".format(name))
         print("Hi,{}!".format(name))

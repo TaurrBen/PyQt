@@ -21,21 +21,15 @@
 """
 
 import asyncio
-import os
-import random
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple, Union, overload, Any
-from datetime import datetime, timedelta
-import pandas as pd
-from PyQt5.QtCore import QCoreApplication, QObject
+from typing import Any
 
-from playwright.async_api import (BrowserContext, BrowserType, Page, async_playwright, Playwright,
-                                  PlaywrightContextManager)
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import (async_playwright, Playwright)
 
-import config
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from utils.qEvent import *
-from ..douyin import store as douyin_store
+from project_all.pro_spider.models.platforms.douyin import store as douyin_store
 from ...var import crawler_type_var, source_keyword_var
 
 from .client import DouyinClient
@@ -45,28 +39,98 @@ from .login import DouyinLogin
 
 
 class DouYinCrawler(AbstractCrawler):
-    context_page: Page
-    dy_client: DouyinClient
-    browser_context: BrowserContext
+    playwright: Playwright = None
+    browser_context: BrowserContext = None
+    context_page: Page= None
+    dy_client: DouyinClient= None
 
-    def __init__(self) -> None:
+    def __init__(self,parent = None) -> None:
+        self.parent = parent
         self.index_url = "https://www.douyin.com"
+        self.params = {}
+
+    def load_params(self, params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+        config.logger.info("[DouYinCrawler.search] Begin search douyin keywords")
+        if self.params:
+            dy_limit_count = 10  # douyin limit page fixed value
+            if self.params.get("video_count") < dy_limit_count:
+                self.params["video_count"] = dy_limit_count
+            start_page = self.params.get("start_page")[1]  # start page number
+            event = ViewDataEvent("pushButton_load_params", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            for keyword in self.params.get("keyword"):
+                source_keyword_var.set(keyword)
+                config.logger.info(f"[DouYinCrawler.search] Current keyword: {keyword}")
+                aweme_list: List[str] = []
+                page = 0
+                dy_search_id = ""
+                while (page - start_page + 1) * dy_limit_count <= self.params.get("video_count"):
+                    if page < start_page:
+                        config.logger.info(f"[DouYinCrawler.search] Skip {page}")
+                        page += 1
+                        continue
+                    try:
+                        config.logger.info(f"[DouYinCrawler.search] search douyin keyword: {keyword}, page: {page}")
+                        posts_res = await self.dy_client.search_info_by_keyword(keyword=keyword,
+                                                                                offset=page * dy_limit_count - dy_limit_count,
+                                                                                publish_time=PublishTimeType(
+                                                                                    config.PUBLISH_TIME_TYPE),
+                                                                                search_id=dy_search_id
+                                                                                )
+                    except DataFetchError:
+                        config.logger.error(f"[DouYinCrawler.search] search douyin keyword: {keyword} failed")
+                        break
+
+                    page += 1
+                    if "data" not in posts_res:
+                        config.logger.error(
+                            f"[DouYinCrawler.search] search douyin keyword: {keyword} failed，账号也许被风控了。")
+                        break
+                    dy_search_id = posts_res.get("extra", {}).get("logid", "")
+                    for post_item in posts_res.get("data"):
+                        try:
+                            aweme_info: Dict = post_item.get("aweme_info") or \
+                                               post_item.get("aweme_mix_info", {}).get("mix_items")[0]
+                        except TypeError:
+                            continue
+                        aweme_list.append(aweme_info.get("aweme_id", ""))
+                        await douyin_store.update_douyin_aweme(aweme_item=aweme_info)
+                config.logger.info(f"[DouYinCrawler.search] keyword:{keyword}, aweme_list:{aweme_list}")
+                await self.batch_get_note_comments(aweme_list)
+        config.logger.info("[DouYinCrawler.start] Douyin Crawler finished ...")
 
     async def start(self) -> None:
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(config.IP_PROXY_POOL_COUNT, enable_validate_ip=True)
             ip_proxy_info: IpInfoModel = await ip_proxy_pool.get_proxy()
             playwright_proxy_format, httpx_proxy_format = self.format_proxy_info(ip_proxy_info)
 
-        async with async_playwright() as playwright:
+        self.playwright = Playwright(await async_playwright().start())
+        # async with async_playwright() as playwright:
+        if True:
             # Launch a browser context.
-            chromium = playwright.chromium
             self.browser_context = await self.launch_browser(
-                chromium,
+                self.playwright.chromium,
                 None,
                 user_agent=None,
-                headless=config.HEADLESS
+                headless=self.params.get("headless")
             )
             # stealth.min.js is a js script to prevent the website from detecting the crawler.
             await self.browser_context.add_init_script(path="libs/stealth.min.js")
@@ -85,17 +149,42 @@ class DouYinCrawler(AbstractCrawler):
                 await login_obj.begin(config.LOGIN_TYPE)
                 await self.dy_client.update_cookies(browser_context=self.browser_context)
             crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for notes and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_awemes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get the information and comments of the specified creator
-                await self.get_creators_and_videos()
-
-            config.logger.info("[DouYinCrawler.start] Douyin Crawler finished ...")
+            config.logger.info("[DouyinCrawler.start] Douyin Crawler Ready ...")
+            event = ViewDataEvent("textBrowser_context", None, self.dy_client.headers,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("textBrowser_cookies", None, self.dy_client.cookie_dict,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for notes and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_awemes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get the information and comments of the specified creator
+            #     await self.get_creators_and_videos()
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self) -> None:
         config.logger.info("[DouYinCrawler.search] Begin search douyin keywords")
@@ -248,7 +337,7 @@ class DouYinCrawler(AbstractCrawler):
 
     async def create_douyin_client(self, httpx_proxy: Optional[str]) -> DouyinClient:
         """Create douyin client"""
-        cookie_str, cookie_dict = utils.convert_cookies(await self.browser_context.cookies())  # type: ignore
+        cookie_str, cookie_dict = convert_cookies(await self.browser_context.cookies())  # type: ignore
         douyin_client = DouyinClient(
             proxies=httpx_proxy,
             headers={
@@ -273,8 +362,8 @@ class DouYinCrawler(AbstractCrawler):
     ) -> BrowserContext:
         """Launch browser and create browser context"""
         if config.SAVE_LOGIN_STATE:
-            user_data_dir = os.path.join(os.getcwd(), "browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+            user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
+                                         config.USER_DATA_DIR % "douyin")  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",
                 user_data_dir=user_data_dir,

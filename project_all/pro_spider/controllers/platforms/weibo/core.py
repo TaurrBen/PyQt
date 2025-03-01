@@ -21,18 +21,14 @@
 """
 
 import asyncio
-import os
-import random
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple
 
-from playwright.async_api import (BrowserContext, BrowserType, Page,
-                                  async_playwright)
+from PyQt5.QtCore import QCoreApplication
+from playwright.async_api import (async_playwright, Playwright)
 
-import config
+from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from utils.qEvent import *
-from ..weibo import store as weibo_store
+from project_all.pro_spider.models.platforms.weibo import store as weibo_store
 from ...var import crawler_type_var, source_keyword_var
 
 from .client import WeiboClient
@@ -43,31 +39,95 @@ from .login import WeiboLogin
 
 
 class WeiboCrawler(AbstractCrawler):
-    context_page: Page
-    wb_client: WeiboClient
-    browser_context: BrowserContext
+    playwright: Playwright = None
+    browser_context: BrowserContext = None
+    context_page: Page = None
+    wb_client: WeiboClient = None
 
-    def __init__(self):
+
+    def __init__(self,parent = None):
+        self.parent = parent
         self.index_url = "https://www.weibo.com"
         self.mobile_index_url = "https://m.weibo.cn"
         self.user_agent = get_user_agent()
         self.mobile_user_agent = get_mobile_user_agent()
+        self.params = {}
+
+    def load_params(self,params:Dict):
+        self.params = params
+        config.logger.info(self.params)
+
+    async def search_by_keyword(self):
+        config.logger.info("[WeiboCrawler.search] Begin search weibo keywords")
+        if self.params:
+            weibo_limit_count = 10  # weibo limit page fixed value
+            if config.CRAWLER_MAX_NOTES_COUNT < weibo_limit_count:
+                config.CRAWLER_MAX_NOTES_COUNT = weibo_limit_count
+            start_page = config.START_PAGE
+            for keyword in config.KEYWORDS.split(","):
+                source_keyword_var.set(keyword)
+                config.logger.info(f"[WeiboCrawler.search] Current search keyword: {keyword}")
+                page = 1
+                while (page - start_page + 1) * weibo_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+                    if page < start_page:
+                        config.logger.info(f"[WeiboCrawler.search] Skip page: {page}")
+                        page += 1
+                        continue
+                    config.logger.info(f"[WeiboCrawler.search] search weibo keyword: {keyword}, page: {page}")
+                    search_res = await self.wb_client.get_note_by_keyword(
+                        keyword=keyword,
+                        page=page,
+                        search_type=SearchType.DEFAULT
+                    )
+                    note_id_list: List[str] = []
+                    note_list = filter_search_result_card(search_res.get("cards"))
+                    for note_item in note_list:
+                        if note_item:
+                            mblog: Dict = note_item.get("mblog")
+                            if mblog:
+                                note_id_list.append(mblog.get("id"))
+                                await weibo_store.update_weibo_note(note_item)
+                                await self.get_note_images(mblog)
+
+                    page += 1
+                    await self.batch_get_notes_comments(note_id_list)
+            config.logger.info("[WeiboCrawler.start] Weibo Crawler finished ...")
+            event = ViewDataEvent("pushButton_load_params", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_video_items_export", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_video_upuser_items_export", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
 
     async def start(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(config.IP_PROXY_POOL_COUNT, enable_validate_ip=True)
             ip_proxy_info: IpInfoModel = await ip_proxy_pool.get_proxy()
             playwright_proxy_format, httpx_proxy_format = self.format_proxy_info(ip_proxy_info)
 
-        async with async_playwright() as playwright:
-            # Launch a browser context.
-            chromium = playwright.chromium
+        self.playwright = Playwright(await async_playwright().start())
+        # async with async_playwright() as playwright:
+        if True:
             self.browser_context = await self.launch_browser(
-                chromium,
+                self.playwright.chromium,
                 None,
                 self.user_agent,
-                headless=config.HEADLESS
+                headless=self.params.get("headless")
             )
             # stealth.min.js is a js script to prevent the website from detecting the crawler.
             await self.browser_context.add_init_script(path="libs/stealth.min.js")
@@ -84,7 +144,7 @@ class WeiboCrawler(AbstractCrawler):
                     context_page=self.context_page,
                     cookie_str=config.COOKIES
                 )
-                await login_obj.begin()
+                await login_obj.begin(config.LOGIN_TYPE)
 
                 # 登录成功后重定向到手机端的网站，再更新手机端登录成功的cookie
                 config.logger.info(
@@ -94,18 +154,44 @@ class WeiboCrawler(AbstractCrawler):
                 await self.wb_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for video and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_notes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their notes and comments
-                await self.get_creators_and_notes()
-            else:
-                pass
-            config.logger.info("[WeiboCrawler.start] Weibo Crawler finished ...")
+            config.logger.info("[BilibiliCrawler.start] Bilibili Crawler Ready ...")
+            event = ViewDataEvent("textBrowser_context", None, self.wb_client.headers,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("textBrowser_cookies", None, self.wb_client.cookie_dict,
+                                  "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_start_search", None, None,
+                                  "qwidget.setEnabled(True)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            event = ViewDataEvent("pushButton_stop_search", None, None,
+                                  "qwidget.setEnabled(False)")
+            QCoreApplication.postEvent(self.parent.ui, event)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for video and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_notes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their notes and comments
+            #     await self.get_creators_and_notes()
+            # else:
+            #     pass
+    async def stop(self):
+        if self.playwright:
+            await self.context_page.close()
+            await self.browser_context.close()
+            await self.playwright.stop()
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
 
     async def search(self):
         """
@@ -314,8 +400,8 @@ class WeiboCrawler(AbstractCrawler):
         """Launch browser and create browser context"""
         config.logger.info("[WeiboCrawler.launch_browser] Begin create browser context ...")
         if config.SAVE_LOGIN_STATE:
-            user_data_dir = os.path.join(os.getcwd(), "browser_data",
-                                         config.USER_DATA_DIR % config.PLATFORM)  # type: ignore
+            user_data_dir = os.path.join(os.getcwd(), "data/spider/browser_data",
+                                         config.USER_DATA_DIR % "weibo")  # type: ignore
             browser_context = await chromium.launch_persistent_context(
                 channel="chrome",
                 user_data_dir=user_data_dir,
