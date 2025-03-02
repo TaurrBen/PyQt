@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1368</width>
-    <height>621</height>
+    <height>811</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,10 +39,50 @@
      <number>5</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,12,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0,0,12,0,0,0">
       <property name="spacing">
        <number>10</number>
       </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_login_type">
+        <item>
+         <widget class="QLabel" name="label_login_type">
+          <property name="text">
+           <string>login_type:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox_login_type">
+          <item>
+           <property name="text">
+            <string>cookies</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>qrcode/暂不支持</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>phone/暂不支持</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_is_save_login_state">
+          <property name="text">
+           <string>is_save_login_state</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
         <property name="spacing">
@@ -72,7 +112,7 @@
              <string>headless</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -130,12 +170,48 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>headers:</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QTextBrowser" name="textBrowser_context"/>
         </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
-         <widget class="QTextBrowser" name="textBrowser_cookies"/>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_cookies2">
+            <property name="text">
+             <string>cookies_in:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="textEdit_cookies"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_cookies">
+            <property name="text">
+             <string>cookies_out:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextBrowser" name="textBrowser_cookies"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -151,12 +227,12 @@
          <widget class="QComboBox" name="comboBox_type">
           <item>
            <property name="text">
-            <string>keyword</string>
+            <string>keywords</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>bvid</string>
+            <string>bvids</string>
            </property>
           </item>
           <item>
@@ -172,28 +248,28 @@
            <number>0</number>
           </property>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_keyword" stretch="0,0,0,0,0,0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_keywords" stretch="0,0,0,0,0,0,0">
             <property name="spacing">
              <number>6</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_keyword">
+             <layout class="QHBoxLayout" name="horizontalLayout_keywords">
               <item>
-               <widget class="QLabel" name="label_keyword">
+               <widget class="QLabel" name="label_keywords">
                 <property name="text">
-                 <string>keyword:</string>
+                 <string>keywords:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_keyword">
+               <widget class="QLineEdit" name="lineEdit_keywords">
                 <property name="text">
                  <string>神经网络,深度学习</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_keyword">
+               <widget class="QPushButton" name="pushButton_keywords">
                 <property name="text">
                  <string>open</string>
                 </property>
@@ -507,24 +583,28 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_bvid" stretch="0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_bvids" stretch="0,0">
             <property name="spacing">
              <number>6</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_bvid">
+             <layout class="QHBoxLayout" name="horizontalLayout_bvids">
               <item>
-               <widget class="QLabel" name="label_bvid">
+               <widget class="QLabel" name="label_bvids">
                 <property name="text">
-                 <string>bvid:</string>
+                 <string>bvids:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_bvid"/>
+               <widget class="QLineEdit" name="lineEdit_bvids">
+                <property name="text">
+                 <string>BV1iezPYCEY3,BV16JXXYsEXv</string>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_bvid">
+               <widget class="QPushButton" name="pushButton_bvids">
                 <property name="text">
                  <string>open</string>
                 </property>
@@ -542,24 +622,28 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_upuser" stretch="0,0">
+           <layout class="QVBoxLayout" name="verticalLayout_upusers" stretch="0,0">
             <property name="spacing">
              <number>6</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_upuser">
+             <layout class="QHBoxLayout" name="horizontalLayout_upusers">
               <item>
-               <widget class="QLabel" name="label_upuser">
+               <widget class="QLabel" name="label_upusers">
                 <property name="text">
                  <string>upuser:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_upuser"/>
+               <widget class="QLineEdit" name="lineEdit_upusers">
+                <property name="text">
+                 <string>339166786</string>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_upuser">
+               <widget class="QPushButton" name="pushButton_upusers">
                 <property name="text">
                  <string>open</string>
                 </property>
@@ -568,7 +652,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_upuser_type">
+             <widget class="QComboBox" name="comboBox_upusers_type">
               <item>
                <property name="text">
                 <string>home</string>
@@ -848,11 +932,6 @@
             <column>
              <property name="text">
               <string>video_cover_url</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>source_keyword</string>
              </property>
             </column>
            </widget>

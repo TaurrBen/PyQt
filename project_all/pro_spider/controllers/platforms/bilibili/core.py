@@ -60,7 +60,7 @@ class BilibiliCrawler(AbstractCrawler):
             await self.context_page.close()
             await self.browser_context.close()
             await self.playwright.stop()
-
+        config.logger.info("Bilibili Crawler Start ...")
         playwright_proxy_format, httpx_proxy_format = None, None
         proxy_name =self.params.get("proxy")
         if not proxy_name == "none":
@@ -96,7 +96,6 @@ class BilibiliCrawler(AbstractCrawler):
                 await login_obj.begin(self.params.get("login_type"))
                 await self.bili_client.update_cookies(browser_context=self.browser_context)
             crawler_type_var.set(self.params.get("type"))
-            config.logger.info("Bilibili Crawler Ready ...")
             event = ViewDataEvent("textBrowser_context", None, self.bili_client.headers,
                                   "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
             QCoreApplication.postEvent(self.parent.ui, event)
@@ -109,6 +108,7 @@ class BilibiliCrawler(AbstractCrawler):
             event = ViewDataEvent("pushButton_stop_search", None, None,
                                   "qwidget.setEnabled(False)")
             QCoreApplication.postEvent(self.parent.ui, event)
+            config.logger.info("Bilibili Crawler Ready ...")
 
     async def stop(self):
         if self.playwright:
@@ -128,11 +128,11 @@ class BilibiliCrawler(AbstractCrawler):
     async def search(self):
         type = self.params.get("type")
         if type == "keywords":
-            await self.by_keywords(self.params.get("keyword"))
+            await self.by_keywords(self.params.get("keywords"))
         elif type == "bvids":
             await self.by_bvids(self.params.get("bvids"))
         elif type == "upuser":
-            await self.by_upuser(self.params.get("upuser"))
+            await self.by_upuser(self.params.get("upusers"))
         else:
             config.logger.error(f"Have not {type}.")
    

@@ -199,7 +199,7 @@ class Ui_bilibili(QWidget,Ui_baseui_bilibili):
         # 根据用户选择决定是否关闭窗口
         if reply == QMessageBox.Yes:
             event.accept()  # 接受关闭事件，窗口关闭
-            self.parent.ui.show()
+            # self.parent.ui.show()
         else:
             event.ignore()  # 忽略关闭事件，窗口保持打开
 

@@ -21,6 +21,7 @@
 """
 import csv
 import sys
+from abc import ABC
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QObject
@@ -37,6 +38,7 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
         super(Ui_xiaohongshu, self).__init__()
         self.setupUi(self)
         self.initialUi()
+
     def initialUi(self):
         self.resize(1280, 720)
         self.widget.setGeometry(QtCore.QRect(0, 0, 1280, 720))
@@ -45,6 +47,20 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
         self.on_comboBox_type_currentIndexChanged()
         self.pushButton_video_items_export.clicked.connect(self.btn_video_items_export_clicked)
         self.pushButton_video_upuser_items_export.clicked.connect(self.btn_video_upuser_items_export_clicked)
+        self.pushButton_keywords.clicked.connect(lambda :self.open_txt_to_lineEdit(self.lineEdit_keywords))
+        self.pushButton_bvids.clicked.connect(lambda :self.open_txt_to_lineEdit(self.lineEdit_bvids))
+        self.pushButton_upusers.clicked.connect(lambda: self.open_txt_to_lineEdit(self.lineEdit_upusers))
+
+    def open_txt_to_lineEdit(self,lineEdit):
+        file_name, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '文本文件 (*.txt);;所有文件 (*)')
+
+        if file_name:
+            # 读取文件内容
+            with open(file_name, 'r', encoding='utf-8') as file:
+                file_content = file.read().replace('，', ',')
+
+            # 将文件内容导入到输入框中
+            lineEdit.setText(file_content)
 
     def export_to_csv(self,table_widget):
         # 打开文件对话框，选择保存位置
@@ -99,6 +115,7 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
     def on_pushButton_clear_clicked(self):
         self.textBrowser_context.clear()
         self.textBrowser_cookies.clear()
+        self.textEdit_cookies.clear()
         self.textBrowser_debug.clear()
         self.tableWidget_video_items.setRowCount(0)
         self.tableWidget_upuser_items.setRowCount(0)
@@ -117,18 +134,18 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
 
     def on_comboBox_type_currentIndexChanged(self):
         type = self.comboBox_type.currentText()
-        if type == "keyword":
-            self.traverse_layout(self.verticalLayout_keyword, hide=False)
-            self.traverse_layout(self.verticalLayout_bvid,hide=True)
-            self.traverse_layout(self.verticalLayout_upuser, hide=True)
-        elif type == "bvid":
-            self.traverse_layout(self.verticalLayout_keyword, hide=True)
-            self.traverse_layout(self.verticalLayout_bvid,hide=False)
-            self.traverse_layout(self.verticalLayout_upuser, hide=False)
+        if type == "keywords":
+            self.traverse_layout(self.verticalLayout_keywords, hide=False)
+            self.traverse_layout(self.verticalLayout_bvids,hide=True)
+            self.traverse_layout(self.verticalLayout_upusers, hide=True)
+        elif type == "bvids":
+            self.traverse_layout(self.verticalLayout_keywords, hide=True)
+            self.traverse_layout(self.verticalLayout_bvids,hide=False)
+            self.traverse_layout(self.verticalLayout_upusers, hide=True)
         elif type == "upuser":
-            self.traverse_layout(self.verticalLayout_keyword, hide=True)
-            self.traverse_layout(self.verticalLayout_bvid,hide=True)
-            self.traverse_layout(self.verticalLayout_upuser, hide=False)
+            self.traverse_layout(self.verticalLayout_keywords, hide=True)
+            self.traverse_layout(self.verticalLayout_bvids,hide=True)
+            self.traverse_layout(self.verticalLayout_upusers, hide=False)
 
     def tableWidget_video_items_addRow(self,data:list):
         current_row_count = self.tableWidget_video_items.rowCount()
@@ -168,6 +185,7 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
                     exec(event.callback_name)
                 return True
         return QWidget.event(self,event)
+
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         # 弹出确认对话框
         reply = QMessageBox.question(
@@ -175,12 +193,13 @@ class Ui_xiaohongshu(QWidget,Ui_baseui_xiaohongshu):
             "确认关闭",
             "你确定要关闭窗口吗？",
             QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No
+            QMessageBox.Yes
+            # QMessageBox.No
         )
         # 根据用户选择决定是否关闭窗口
         if reply == QMessageBox.Yes:
             event.accept()  # 接受关闭事件，窗口关闭
-            self.parent.ui.show()
+            # self.parent.ui.show()
         else:
             event.ignore()  # 忽略关闭事件，窗口保持打开
 

@@ -49,6 +49,20 @@ class View_bilibili():
     def test(self, value):
         return object
 
+    # _instance = None
+    #
+    # def __new__(cls, *args, **kwargs):
+    #     if cls._instance is None:
+    #         cls._instance = super().__new__(cls)
+    #     print("new  ",cls._instance)
+    #     return cls._instance
+    #
+    # def __call__(cls, *args, **kwargs):
+    #     if cls not in cls._instance:
+    #         cls._instance = super().__new__(*args, **kwargs)
+    #     print("call  ",cls._instance)
+    #     return cls._instance
+
     #### 2.初始化 ####
     def __init__(self, parent):
         self.parent = parent
@@ -66,14 +80,25 @@ class View_bilibili():
     #### connect widget signals to event functions ####
     def setup_bindings(self):
         #### ui signal -----> ui slots ####
+        # try:
+        #     self.ui.pushButton_start_search.clicked.disconnect()
+        #     self.ui.pushButton_stop_search.clicked.disconnect()
+        #     self.ui.pushButton_load_params.clicked.disconnect()
+        # except Exception:
+        #     pass
         # self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
-        self.ui.pushButton_start_search.clicked.connect(self.btn_start_search_clicked)
-        self.ui.pushButton_stop_search.clicked.connect(self.btn_stop_search_clicked)
-        self.ui.pushButton_load_params.clicked.connect(self.btn_load_params_clicked)
+        self.ui.btn_start_search_clicked(self.btn_start_search_clicked)
+        self.ui.btn_stop_search_clicked(self.btn_stop_search_clicked)
+        self.ui.btn_load_params_clicked(self.btn_load_params_clicked)
 
         for handler in config.all_handlers:
             if isinstance(handler, QTextBrowserHandler):
                 # 绑定信号到UI更新
+                # print("bind  ")
+                # try:
+                #     handler.append_log.disconnect()
+                # except Exception:
+                #     pass
                 handler.append_log.connect(self.append_log)
                 break
 
@@ -85,6 +110,7 @@ class View_bilibili():
 
     def initial_datas_load(self):
         self.combobox_change()
+        # self.btn_load_params_clicked()
 
     #### 3.槽函数 ####
     #### signal event functions ####

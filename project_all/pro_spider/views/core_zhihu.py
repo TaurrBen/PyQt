@@ -12,8 +12,8 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : core_zhihu.py
-# Time       ：2025.2.26 23:24
+# File       : core.py
+# Time       ：2025.2.14 23:22
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
@@ -49,6 +49,20 @@ class View_zhihu():
     def test(self, value):
         return object
 
+    # _instance = None
+    #
+    # def __new__(cls, *args, **kwargs):
+    #     if cls._instance is None:
+    #         cls._instance = super().__new__(cls)
+    #     print("new  ",cls._instance)
+    #     return cls._instance
+    #
+    # def __call__(cls, *args, **kwargs):
+    #     if cls not in cls._instance:
+    #         cls._instance = super().__new__(*args, **kwargs)
+    #     print("call  ",cls._instance)
+    #     return cls._instance
+
     #### 2.初始化 ####
     def __init__(self, parent):
         self.parent = parent
@@ -66,15 +80,27 @@ class View_zhihu():
     #### connect widget signals to event functions ####
     def setup_bindings(self):
         #### ui signal -----> ui slots ####
+        # try:
+        #     self.ui.pushButton_start_search.clicked.disconnect()
+        #     self.ui.pushButton_stop_search.clicked.disconnect()
+        #     self.ui.pushButton_load_params.clicked.disconnect()
+        # except Exception:
+        #     pass
         # self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
-        self.ui.pushButton_start_search.clicked.connect(self.btn_start_search_clicked)
-        self.ui.pushButton_stop_search.clicked.connect(self.btn_stop_search_clicked)
-        self.ui.pushButton_load_params.clicked.connect(self.btn_load_params_clicked)
+        self.ui.btn_start_search_clicked(self.btn_start_search_clicked)
+        self.ui.btn_stop_search_clicked(self.btn_stop_search_clicked)
+        self.ui.btn_load_params_clicked(self.btn_load_params_clicked)
 
         for handler in config.all_handlers:
             if isinstance(handler, QTextBrowserHandler):
                 # 绑定信号到UI更新
+                # print("bind  ")
+                # try:
+                #     handler.append_log.disconnect()
+                # except Exception:
+                #     pass
                 handler.append_log.connect(self.append_log)
+                break
 
         #### 可形成闭环 ####
         #### ui signal -----? ctrl slots ####
@@ -84,6 +110,7 @@ class View_zhihu():
 
     def initial_datas_load(self):
         self.combobox_change()
+        # self.btn_load_params_clicked()
 
     #### 3.槽函数 ####
     #### signal event functions ####
@@ -111,28 +138,26 @@ class View_zhihu():
             self.ui.textBrowser_debug.append(msg)
 
     def btn_start_search_clicked(self):
-        config.logger.info("触发1")
-        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.search_by_keyword(), self.ctrl.loop)
+        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.search(), self.ctrl.loop)
         # 向asyncio中增加一个普通函数任务
         # self.ctrl.loop.call_soon_threadsafe(self.printInfo, 'andyshengjl')
-        config.logger.info("触发11")
 
     def btn_stop_search_clicked(self):
-        # self.ctrl.thd.stop()
-        config.logger.info("触发2")
         asyncio.run_coroutine_threadsafe(self.ctrl.crawler.stop(), self.ctrl.loop)
-        config.logger.info("触发22")
 
     def btn_load_params_clicked(self):
         try:
             self.params = {
+                "login_type":self.ui.comboBox_login_type.currentText(),
+                "cookies":self.ui.textEdit_cookies.toPlainText(),
+                "is_save_login_state":self.ui.checkBox_is_save_login_state.isChecked(),
                 "is_playwright":self.ui.checkBox_is_playwright.isChecked(),
                 "headless":self.ui.checkBox_headless.isChecked(),
                 "proxy":self.ui.comboBox_proxy_type.currentText(),
                 "concurrency_num":int(self.ui.lineEdit_concurrency_num.text()),
                 "type":self.ui.comboBox_type.currentText(),
 
-                "keyword":self.ui.lineEdit_keyword.text().split(","),
+                "keywords":self.ui.lineEdit_keywords.text().split(","),
                 "search_type":self.ui.comboBox_search_type.currentText(),
                 "order_type":self.ui.comboBox_order_type.currentText(),
                 "pubtime_begin_s":self.ui.dateEdit_pubtime_begin_s.date().toString("yyyy-MM-dd"),
@@ -140,19 +165,18 @@ class View_zhihu():
                 "duration":self.ui.comboBox_duration.currentIndex(),
                 "tids":self.ui.comboBox_tids.currentText(),
 
-                "bvid":self.ui.lineEdit_bvid.text(),
+                "bvids":self.ui.lineEdit_bvids.text().split(","),
                 "other_page":self.ui.radioButton_other_page.isChecked(),
 
-                "upuser":self.ui.label_upuser.text(),
-                "upuser_type":self.ui.comboBox_upuser_type.currentText(),
+                "upuser":self.ui.lineEdit_upusers.text().split(","),
+                "upuser_type":self.ui.comboBox_upusers_type.currentText(),
 
                 "download_video":self.ui.checkBox_download_video.isChecked(),
                 "download_comment":self.ui.checkBox_download_comment.isChecked(),
                 "sub_comment":self.ui.checkBox_download_sub_comment.isChecked(),
 
                 "video_count": int(self.ui.lineEdit_video_count.text()),
-                "start_page": [self.ui.checkBox_start_page.isChecked(),
-                               int(self.ui.lineEdit_start_page.text())],
+                "start_page": int(self.ui.lineEdit_start_page.text()),
                 "comment_count":int(self.ui.lineEdit_conment_count.text()),
 
                 "video_items_is_save":self.ui.checkBox_video_items_is_save.isChecked(),
@@ -163,7 +187,7 @@ class View_zhihu():
         except Exception as e:
             config.logger.error(e)
         ## check params
-        if not isinstance(self.ctrl.crawler, ZhihuCrawler):
+        if not isinstance(self.ctrl.crawler,ZhihuCrawler):
             self.ctrl.crawler = CrawlerFactory.create_crawler(self, platform="zhihu")
         self.ui.pushButton_video_items_export.setEnabled(False)
         self.ui.pushButton_video_upuser_items_export.setEnabled(False)
@@ -171,8 +195,6 @@ class View_zhihu():
         self.ui.pushButton_stop_search.setEnabled(False)
         asyncio.run_coroutine_threadsafe(self.ctrl.crawler.start(), self.ctrl.loop)
         self.ctrl.crawler.load_params(self.params)
-
-
 
     #### ui slots <----- ctrl signal ####
     def update_msg(self,msg):
