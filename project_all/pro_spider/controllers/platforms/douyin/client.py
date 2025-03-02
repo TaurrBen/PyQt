@@ -21,21 +21,17 @@
 """
 import asyncio
 import copy
-import json
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable
 from urllib.parse import urlencode
 
-import httpx
 import requests
-from playwright.async_api import BrowserContext, Page
 
 from .exception import *
 from .field import *
 from .help import *
 
-import config
 from utils.spider import *
-from ...var import request_keyword_var
+from project_all.pro_spider.models.var import request_keyword_var
 
 class DouyinClient(AbstractApiClient):
     def __init__(

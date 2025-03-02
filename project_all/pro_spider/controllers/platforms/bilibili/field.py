@@ -19,32 +19,32 @@
 # version    ：python 3.9
 # Description：
 """
-from enum import Enum
+SEARCH_TYPE_LIST = {
+    "default":"video",
+    "video":"video",
+    "media_bangumi":"media_bangumi",
+    "media_ft":"media_ft",
+    "live":"live",
+    "article":"article",
+    "bili_user":"bili_user",
+}
+ORDER_TYPE_LIST = {
+    "default":"","综合排序":"",
+    "最多播放":"click","最新发布":"pubdate","最多弹幕":"dm","最多收藏":"stow"
+}
+DURATION_LIST = {
+    "default":0,"全部时长":0,
+    "10分钟一下":1,"10-30分钟":2,"30-60分钟一下":3,"60分钟以上":4,
+}
+TIDS_LIST = {
+    "default":0,"综合分区":0,
+    "动画":1,"番剧":13,"国创":167,"音乐":3,"舞蹈":129,"游戏":4,"知识":36,
+    "科技":188,"运动":234,"汽车":223,"生活":160,"美食":211,"动物圈":217,
+    "鬼畜":119,"时尚":155,"资讯":202,"娱乐":5,"影视":181,"纪录片":177,
+    "电影":23,"电视剧":11,
+}
 
-
-class SearchOrderType(Enum):
-    # 综合排序
-    DEFAULT = ""
-
-    # 最多点击
-    MOST_CLICK = "click"
-
-    # 最新发布
-    LAST_PUBLISH = "pubdate"
-
-    # 最多弹幕
-    MOST_DANMU = "dm"
-
-    # 最多收藏
-    MOST_MARK = "stow"
-
-
-class CommentOrderType(Enum):
-    # 仅按热度
-    DEFAULT = 0
-
-    # 按热度+按时间
-    MIXED = 1
-
-    # 按时间
-    TIME = 2
+COMMENT_TYPE_LIST = {
+    "default":0,
+    "mixed":1,"latest":2,"hottest":3,
+}

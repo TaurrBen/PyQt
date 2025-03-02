@@ -22,17 +22,13 @@
 
 import asyncio
 import csv
-import json
-import os
 import pathlib
-from typing import Dict
 
 import aiofiles
 
-import config
 from utils import time_utils
 from utils.spider import *
-from project_all.pro_spider.controllers.var import crawler_type_var
+from project_all.pro_spider.models.var import crawler_type_var
 
 
 def calculate_number_of_files(file_store_path: str) -> int:

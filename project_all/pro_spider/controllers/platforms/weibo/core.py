@@ -29,7 +29,7 @@ from playwright.async_api import (async_playwright, Playwright)
 from utils.qEvent import ViewDataEvent
 from utils.spider import *
 from project_all.pro_spider.models.platforms.weibo import store as weibo_store
-from ...var import crawler_type_var, source_keyword_var
+from project_all.pro_spider.models.var import crawler_type_var, source_keyword_var
 
 from .client import WeiboClient
 from .exception import DataFetchError

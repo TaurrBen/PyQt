@@ -28,7 +28,6 @@ import aiofiles
 from utils import spider
 import config
 
-
 class BilibiliVideo(spider.AbstractStoreImage):
     video_store_path: str = "out/spider/bilibili/videos"
 

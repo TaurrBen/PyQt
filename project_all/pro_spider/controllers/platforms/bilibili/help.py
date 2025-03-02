@@ -23,6 +23,7 @@ import urllib.parse
 from hashlib import md5
 from typing import Dict
 from utils import time_utils
+
 class BilibiliSign:
     def __init__(self, img_key: str, sub_key: str):
         self.img_key = img_key
@@ -66,7 +67,6 @@ class BilibiliSign:
         wbi_sign = md5((query + salt).encode()).hexdigest()  # 计算 w_rid
         req_data['w_rid'] = wbi_sign
         return req_data
-
 
 if __name__ == '__main__':
     _img_key = "7cd084941338484aae1ad9425b84077c"

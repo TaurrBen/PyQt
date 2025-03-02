@@ -20,7 +20,7 @@
 # Description：
 """
 
-from project_all.pro_spider.controllers.var import source_keyword_var
+from project_all.pro_spider.models.var import source_keyword_var
 
 from project_all.pro_spider.models.platforms.zhihu.m_zhihu import *
 from .zhihu_store_impl import *

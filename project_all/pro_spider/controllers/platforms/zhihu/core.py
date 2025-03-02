@@ -30,7 +30,7 @@ from project_all.pro_spider.models.platforms.zhihu.store import *
 from project_all.pro_spider.models.platforms.zhihu import store as zhihu_store
 from utils.qEvent import ViewDataEvent
 from utils.spider import *
-from ...var import crawler_type_var, source_keyword_var
+from project_all.pro_spider.models.var import crawler_type_var, source_keyword_var
 
 from .client import ZhiHuClient
 from .exception import DataFetchError

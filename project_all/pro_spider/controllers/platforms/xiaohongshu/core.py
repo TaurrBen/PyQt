@@ -31,7 +31,7 @@ from playwright.async_api import async_playwright, Playwright
 from utils.qEvent import ViewDataEvent
 from utils.spider import *
 from project_all.pro_spider.models.platforms.xiaohongshu import store as xiaohongshu_store
-from ...var import crawler_type_var, source_keyword_var
+from project_all.pro_spider.models.var import crawler_type_var, source_keyword_var
 
 from .client import XiaoHongShuClient
 from .exception import DataFetchError

@@ -19,14 +19,8 @@
 # version    ：python 3.9
 # Description：
 """
-from typing import List
 
-from PyQt5.QtCore import QCoreApplication
-
-import config
-from utils import time_utils
-from utils.qEvent import ViewDataEvent
-from project_all.pro_spider.controllers.var import source_keyword_var
+from project_all.pro_spider.models.var import source_keyword_var
 
 from .bilibili_store_impl import *
 from .bilibili_store_video import *
@@ -47,13 +41,13 @@ class BiliStoreFactory:
                 "[BiliStoreFactory.create_store] Invalid save option only supported csv or db or json ...")
         return store_class()
 
-
 async def update_bilibili_video(video_item: Dict,is_save)->Dict:
     video_item_view: Dict = video_item.get("View")
     video_user_info: Dict = video_item_view.get("owner")
     video_item_stat: Dict = video_item_view.get("stat")
     video_id = str(video_item_view.get("aid"))
     save_content_item = {
+        "keyword": source_keyword_var.get(),
         "video_id": str(video_id),
         "video_type": "video",
         "title": video_item_view.get("title", "")[:500],
@@ -69,14 +63,11 @@ async def update_bilibili_video(video_item: Dict,is_save)->Dict:
         "last_modify_ts": str(time_utils.get_current_timestamp()),
         "video_url": f"https://www.bilibili.com/video/av{video_id}",
         "video_cover_url": video_item_view.get("pic", ""),
-        "source_keyword": source_keyword_var.get(),
     }
-    config.logger.info(
-        f"[store.bilibili.update_bilibili_video] bilibili video id:{video_id}, title:{save_content_item.get('title')}")
+    config.logger.debug(f"Bilibili video id:{video_id}, title:{save_content_item.get('title')}")
     if is_save:
         await BiliStoreFactory.create_store().store_content(content_item=save_content_item)
     return save_content_item
-
 
 async def update_up_info(video_item: Dict,is_save)->Dict:
     video_item_card_list: Dict = video_item.get("Card")
@@ -91,19 +82,16 @@ async def update_up_info(video_item: Dict,is_save)->Dict:
         "user_rank": str(video_item_card.get("level_info").get("current_level")),
         "is_official": str(video_item_card.get("official_verify").get("type")),
     }
-    config.logger.info(
-        f"[store.bilibili.update_up_info] bilibili user_id:{video_item_card.get('mid')}")
+    config.logger.debug(f"Bilibili user_id:{video_item_card.get('mid')}")
     if is_save:
         await BiliStoreFactory.create_store().store_creator(creator=saver_up_info)
     return saver_up_info
-
 
 async def batch_update_bilibili_video_comments(video_id: str, comments: List[Dict]):
     if not comments:
         return
     for comment_item in comments:
         await update_bilibili_video_comment(video_id, comment_item)
-
 
 async def update_bilibili_video_comment(video_id: str, comment_item: Dict):
     comment_id = str(comment_item.get("rpid"))
@@ -122,10 +110,11 @@ async def update_bilibili_video_comment(video_id: str, comment_item: Dict):
         "sub_comment_count": str(comment_item.get("rcount", 0)),
         "last_modify_ts": str(time_utils.get_current_timestamp()),
     }
-    config.logger.info(
-        f"[store.bilibili.update_bilibili_video_comment] Bilibili video comment: {comment_id}, content: {save_comment_item.get('content')}")
+    config.logger.info(f"Bilibili video id:{save_comment_item.get('video_id')},"
+                       f"video comment: {comment_id},"
+                       # f"content: {save_comment_item.get('content')}."
+                       )
     await BiliStoreFactory.create_store().store_comment(comment_item=save_comment_item)
-
 
 async def store_video(aid, video_content, extension_file_name):
     """

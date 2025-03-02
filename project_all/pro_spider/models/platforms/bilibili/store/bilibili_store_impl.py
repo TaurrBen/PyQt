@@ -21,17 +21,13 @@
 """
 import asyncio
 import csv
-import json
-import os
 import pathlib
-from typing import Dict
 
 import aiofiles
 
-import config
 from utils import time_utils
 from utils.spider import *
-from project_all.pro_spider.controllers.var import crawler_type_var
+from project_all.pro_spider.models.var import crawler_type_var
 
 
 def calculate_number_of_files(file_store_path: str) -> int:
@@ -72,6 +68,7 @@ class BiliCsvStoreImplement(AbstractStore):
         Returns: no returns
 
         """
+
         pathlib.Path(self.csv_store_path).mkdir(parents=True, exist_ok=True)
         save_file_name = self.make_save_file_name(store_type=store_type)
         async with aiofiles.open(save_file_name, mode='a+', encoding="gbk", newline="",errors='ignore') as f:

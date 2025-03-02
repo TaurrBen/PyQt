@@ -83,6 +83,7 @@ class View():
         #### ui signal -----> ui slots ####
         # self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
         self.ui.pushButton.clicked.connect(self.btn_clicked)
+        self.ui.treeWidget.itemDoubleClicked.connect(self.btn_clicked)
         #### 可形成闭环 ####
         #### ui signal -----? ctrl slots ####
         # self.ui.comboBox.currentIndexChanged.connect(lambda : self.ctrl.set_msg(self.ui.comboBox.currentText()))

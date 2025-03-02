@@ -30,7 +30,7 @@ from playwright.async_api import (async_playwright, Playwright)
 from utils.qEvent import ViewDataEvent
 from utils.spider import *
 from project_all.pro_spider.models.platforms.kuaishou import store as kuaishou_store
-from ...var import crawler_type_var, source_keyword_var,comment_tasks_var
+from project_all.pro_spider.models.var import crawler_type_var, source_keyword_var,comment_tasks_var
 
 from .client import KuaiShouClient
 from .exception import DataFetchError

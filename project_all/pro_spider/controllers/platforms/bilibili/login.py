@@ -30,7 +30,6 @@ from tenacity import (RetryError, retry, retry_if_result, stop_after_attempt,
 import config
 from utils.spider import *
 
-
 class BilibiliLogin(AbstractLogin):
     def __init__(self,
                  login_type: str,
@@ -47,16 +46,15 @@ class BilibiliLogin(AbstractLogin):
 
     async def begin(self,login_type:str):
         """Start login bilibili"""
-        config.logger.info("[BilibiliLogin.begin] Begin login Bilibili ...")
+        config.logger.info("Begin login Bilibili ...")
         if login_type == "qrcode":
             await self.login_by_qrcode()
         elif login_type == "phone":
             await self.login_by_mobile()
-        elif login_type == "cookie":
+        elif login_type == "cookies":
             await self.login_by_cookies()
         else:
-            raise ValueError(
-                "[BilibiliLogin.begin] Invalid Login Type Currently only supported qrcode or phone or cookie ...")
+            raise ValueError("Invalid Login Type Currently only supported qrcode or phone or cookie ...")
 
     @retry(stop=stop_after_attempt(600), wait=wait_fixed(1), retry=retry_if_result(lambda value: value is False))
     async def check_login_state(self) -> bool:
@@ -73,7 +71,7 @@ class BilibiliLogin(AbstractLogin):
 
     async def login_by_qrcode(self):
         """login bilibili website and keep webdriver login state"""
-        config.logger.info("[BilibiliLogin.login_by_qrcode] Begin login bilibili by qrcode ...")
+        config.logger.info("Begin login bilibili by qrcode ...")
 
         # click login button
         login_button_ele = self.context_page.locator(
@@ -88,30 +86,30 @@ class BilibiliLogin(AbstractLogin):
             selector=qrcode_img_selector
         )
         if not base64_qrcode_img:
-            config.logger.info("[BilibiliLogin.login_by_qrcode] login failed , have not found qrcode please check ....")
+            config.logger.info("login failed , have not found qrcode please check ....")
             sys.exit()
 
         # show login qrcode
         partial_show_qrcode = functools.partial(show_qrcode, base64_qrcode_img)
         asyncio.get_running_loop().run_in_executor(executor=None, func=partial_show_qrcode)
 
-        config.logger.info(f"[BilibiliLogin.login_by_qrcode] Waiting for scan code login, remaining time is 20s")
+        config.logger.info(f"Waiting for scan code login, remaining time is 20s")
         try:
             await self.check_login_state()
         except RetryError:
-            config.logger.info("[BilibiliLogin.login_by_qrcode] Login bilibili failed by qrcode login method ...")
+            config.logger.error("Login bilibili failed by qrcode login method ...")
             sys.exit()
 
         wait_redirect_seconds = 5
         config.logger.info(
-            f"[BilibiliLogin.login_by_qrcode] Login successful then wait for {wait_redirect_seconds} seconds redirect ...")
+            f"Login successful then wait for {wait_redirect_seconds} seconds redirect ...")
         await asyncio.sleep(wait_redirect_seconds)
 
     async def login_by_mobile(self):
         pass
 
     async def login_by_cookies(self):
-        config.logger.info("[BilibiliLogin.login_by_qrcode] Begin login bilibili by cookie ...")
+        config.logger.info("Begin login bilibili by cookie ...")
         for key, value in convert_str_cookie_to_dict(self.cookie_str).items():
             await self.browser_context.add_cookies([{
                 'name': key,
@@ -119,3 +117,13 @@ class BilibiliLogin(AbstractLogin):
                 'domain': ".bilibili.com",
                 'path': "/"
             }])
+        try:
+            await self.check_login_state()
+        except RetryError:
+            config.logger.error("Login bilibili failed by qrcode login method ...")
+            sys.exit()
+
+        wait_redirect_seconds = 5
+        config.logger.info(
+            f"Login successful then wait for {wait_redirect_seconds} seconds redirect ...")
+        await asyncio.sleep(wait_redirect_seconds)

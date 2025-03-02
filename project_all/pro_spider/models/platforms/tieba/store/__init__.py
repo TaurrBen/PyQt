@@ -21,7 +21,7 @@
 """
 
 from project_all.pro_spider.models.platforms.tieba.m_tieba import TiebaComment, TiebaCreator, TiebaNote
-from project_all.pro_spider.controllers.var import source_keyword_var
+from project_all.pro_spider.models.var import source_keyword_var
 
 from .tieba_store_impl import *
 

@@ -112,28 +112,26 @@ class View_bilibili():
             self.ui.textBrowser_debug.append(msg)
 
     def btn_start_search_clicked(self):
-        config.logger.info("触发1")
-        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.search_by_keyword(), self.ctrl.loop)
+        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.search(), self.ctrl.loop)
         # 向asyncio中增加一个普通函数任务
         # self.ctrl.loop.call_soon_threadsafe(self.printInfo, 'andyshengjl')
-        config.logger.info("触发11")
 
     def btn_stop_search_clicked(self):
-        # self.ctrl.thd.stop()
-        config.logger.info("触发2")
         asyncio.run_coroutine_threadsafe(self.ctrl.crawler.stop(), self.ctrl.loop)
-        config.logger.info("触发22")
 
     def btn_load_params_clicked(self):
         try:
             self.params = {
+                "login_type":self.ui.comboBox_login_type.currentText(),
+                "cookies":self.ui.textEdit_cookies.toPlainText(),
+                "is_save_login_state":self.ui.checkBox_is_save_login_state.isChecked(),
                 "is_playwright":self.ui.checkBox_is_playwright.isChecked(),
                 "headless":self.ui.checkBox_headless.isChecked(),
                 "proxy":self.ui.comboBox_proxy_type.currentText(),
                 "concurrency_num":int(self.ui.lineEdit_concurrency_num.text()),
                 "type":self.ui.comboBox_type.currentText(),
 
-                "keyword":self.ui.lineEdit_keyword.text().split(","),
+                "keywords":self.ui.lineEdit_keywords.text().split(","),
                 "search_type":self.ui.comboBox_search_type.currentText(),
                 "order_type":self.ui.comboBox_order_type.currentText(),
                 "pubtime_begin_s":self.ui.dateEdit_pubtime_begin_s.date().toString("yyyy-MM-dd"),
@@ -141,19 +139,18 @@ class View_bilibili():
                 "duration":self.ui.comboBox_duration.currentIndex(),
                 "tids":self.ui.comboBox_tids.currentText(),
 
-                "bvid":self.ui.lineEdit_bvid.text(),
+                "bvids":self.ui.lineEdit_bvids.text().split(","),
                 "other_page":self.ui.radioButton_other_page.isChecked(),
 
-                "upuser":self.ui.label_upuser.text(),
-                "upuser_type":self.ui.comboBox_upuser_type.currentText(),
+                "upuser":self.ui.lineEdit_upusers.text().split(","),
+                "upuser_type":self.ui.comboBox_upusers_type.currentText(),
 
                 "download_video":self.ui.checkBox_download_video.isChecked(),
                 "download_comment":self.ui.checkBox_download_comment.isChecked(),
                 "sub_comment":self.ui.checkBox_download_sub_comment.isChecked(),
 
                 "video_count": int(self.ui.lineEdit_video_count.text()),
-                "start_page": [self.ui.checkBox_start_page.isChecked(),
-                               int(self.ui.lineEdit_start_page.text())],
+                "start_page": int(self.ui.lineEdit_start_page.text()),
                 "comment_count":int(self.ui.lineEdit_conment_count.text()),
 
                 "video_items_is_save":self.ui.checkBox_video_items_is_save.isChecked(),

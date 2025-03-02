@@ -19,15 +19,8 @@
 # version    ：python 3.9
 # Description：
 """
-from typing import List
 
-from PyQt5.QtCore import QCoreApplication
-
-import config
-from utils import time_utils
-from utils.qEvent import ViewDataEvent
-from utils.spider import AbstractStore
-from project_all.pro_spider.controllers.var import source_keyword_var
+from project_all.pro_spider.models.var import source_keyword_var
 
 from .kuaishou_store_impl import *
 

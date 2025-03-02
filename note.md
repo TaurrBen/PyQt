@@ -24,7 +24,7 @@ wts: 1740395309
 search_type: video-----media_bangumi-----media_ft-----live-----article-----bili_user
 __refresh__: true
 page: 1
-page_size: 42会根据不同情况变，不发是不是默认
+page_size: 42
 综合order: click-----pubdate-----dm-----stow
 视频order: click-----pubdate-----dm-----stow
 
@@ -37,7 +37,16 @@ source_tag: 3
 tids: 1动画13番剧167国创3音乐129舞蹈4游戏36知识188科技234运动223汽车160生活211美食217动物圈119鬼畜155时尚202资讯5娱乐181影视177纪录片23电影11电视剧
 ```
 
+- https://api.bilibili.com/x/web-interface/view/detail
+  - 获取视频信息
+
+
+```
+aid  bvid
+```
+
 - https://api.bilibili.com/x/player/wbi/playurl
+  - 获取视频url
 
 ```
 avid: 114053880021329
@@ -63,6 +72,33 @@ fnver: 0
 fnval: 2000
 fourk: 1
 platform: pc
+```
+
+- https://api.bilibili.com/x/v2/reply/wbi/main
+  - 获取评论信息
+
+```
+oid: 114081881135375
+type: 1
+mode: 2  3
+pagination_str: {"offset":""}
+plat: 1
+seek_rpid: 
+web_location: 1315875
+w_rid: d39b1fd269a1356d6e7f8dfbe6c49cc0
+wts: 1740842224
+```
+
+- https://api.bilibili.com/x/v2/reply/reply
+  - 获取子评论
+
+```
+oid: 113542845963788
+type: 1
+root: 247797391201
+ps: 10
+pn: 1
+web_location: 333.788
 ```
 
 ## 抖音关键词搜索

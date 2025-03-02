@@ -22,7 +22,7 @@
 from typing import Dict, List
 
 from utils.mysql.async_db import AsyncMysqlDB
-from project_all.pro_spider.controllers.var import media_crawler_db_var
+from project_all.pro_spider.models.var import media_crawler_db_var
 
 
 
