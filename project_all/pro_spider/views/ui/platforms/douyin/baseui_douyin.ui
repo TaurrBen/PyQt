@@ -599,7 +599,7 @@
               <item>
                <widget class="QLineEdit" name="lineEdit_bvids">
                 <property name="text">
-                 <string>BV1iezPYCEY3,BV16JXXYsEXv</string>
+                 <string>7476832911644216586,7444173197009866011</string>
                 </property>
                </widget>
               </item>
@@ -638,7 +638,7 @@
               <item>
                <widget class="QLineEdit" name="lineEdit_upusers">
                 <property name="text">
-                 <string>339166786</string>
+                 <string>MS4wLjABAAAAvOWP0O8CPwmnEUw7EuYPiT51DmXsM_mzbJFMa7ariTs</string>
                 </property>
                </widget>
               </item>
@@ -861,12 +861,12 @@
             </column>
             <column>
              <property name="text">
-              <string>video_id</string>
+              <string>aweme_id</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>video_type</string>
+              <string>aweme_type</string>
              </property>
             </column>
             <column>
@@ -891,6 +891,26 @@
             </column>
             <column>
              <property name="text">
+              <string>sec_uid</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>short_user_id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>user_unique_id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>user_signature</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
               <string>nickname</string>
              </property>
             </column>
@@ -906,17 +926,22 @@
             </column>
             <column>
              <property name="text">
-              <string>video_play_count</string>
+              <string>collected_count</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>video_danmaku</string>
+              <string>comment_count</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>video_comment</string>
+              <string>share_count</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>ip_location</string>
              </property>
             </column>
             <column>
@@ -926,12 +951,7 @@
             </column>
             <column>
              <property name="text">
-              <string>video_url</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>video_cover_url</string>
+              <string>aweme_url</string>
              </property>
             </column>
            </widget>
@@ -988,27 +1008,37 @@
             </column>
             <column>
              <property name="text">
+              <string>desc</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>ip_location</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>follows</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>fans</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>interaction</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>videos_count</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
               <string>last_modify_ts</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>total_fans</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>total_liked</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>user_rank</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>is_official</string>
              </property>
             </column>
            </widget>

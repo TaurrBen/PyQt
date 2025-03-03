@@ -154,6 +154,200 @@ webid: 7464257619323651624
 - https://www.douyin.com/aweme/v1/web/general/search/single/
   - 重要搜索信息
 
+```
+"filter_settings": [
+            {
+                "title": "排序依据",
+                "name": "sort_type",
+                "log_name": "by_top",
+                "default_index": 0,
+                "android_version": 170300,
+                "ios_version": 170300,
+                "lite_android_version": 170300,
+                "lite_ios_version": 170300,
+                "enable_lite": true,
+                "huoshan_android_version": 0,
+                "huoshan_ios_version": 0,
+                "enable_huo_shan": false,
+                "items": [
+                    {
+                        "title": "综合排序",
+                        "value": "0",
+                        "log_value": "top_all"
+                    },
+                    {
+                        "title": "最新发布",
+                        "value": "2",
+                        "log_value": "top_time"
+                    },
+                    {
+                        "title": "最多点赞",
+                        "value": "1",
+                        "log_value": "top_likes"
+                    }
+                ]
+            },
+            {
+                "title": "发布时间",
+                "name": "publish_time",
+                "log_name": "by_time",
+                "default_index": 0,
+                "android_version": 170300,
+                "ios_version": 170300,
+                "lite_android_version": 170300,
+                "lite_ios_version": 170300,
+                "enable_lite": true,
+                "huoshan_android_version": 0,
+                "huoshan_ios_version": 0,
+                "enable_huo_shan": false,
+                "items": [
+                    {
+                        "title": "不限",
+                        "value": "0",
+                        "log_value": "time_all"
+                    },
+                    {
+                        "title": "一天内",
+                        "value": "1",
+                        "log_value": "within_day"
+                    },
+                    {
+                        "title": "一周内",
+                        "value": "7",
+                        "log_value": "within_week"
+                    },
+                    {
+                        "title": "半年内",
+                        "value": "180",
+                        "log_value": "within_half_year"
+                    }
+                ]
+            },
+            {
+                "title": "视频时长",
+                "name": "filter_duration",
+                "log_name": "by_duration",
+                "default_index": 0,
+                "android_version": 190200,
+                "ios_version": 190200,
+                "lite_android_version": 0,
+                "lite_ios_version": 0,
+                "enable_lite": false,
+                "huoshan_android_version": 0,
+                "huoshan_ios_version": 0,
+                "enable_huo_shan": false,
+                "items": [
+                    {
+                        "title": "不限",
+                        "value": "",
+                        "log_value": "不限"
+                    },
+                    {
+                        "title": "1分钟以下",
+                        "value": "0-1",
+                        "log_value": "1分钟以下"
+                    },
+                    {
+                        "title": "1-5分钟",
+                        "value": "1-5",
+                        "log_value": "1-5分钟"
+                    },
+                    {
+                        "title": "5分钟以上",
+                        "value": "5-10000",
+                        "log_value": "5分钟以上"
+                    }
+                ],
+                "search_nil_text": {
+                    "info": "暂无更多，",
+                    "jump_text": "查看所有内容"
+                },
+                "search_less_text": {
+                    "info": "暂无更多，",
+                    "jump_text": "查看所有内容"
+                }
+            },
+            {
+                "title": "搜索范围",
+                "name": "search_range",
+                "log_name": "by_history",
+                "default_index": 0,
+                "android_version": 190400,
+                "ios_version": 190400,
+                "lite_android_version": 0,
+                "lite_ios_version": 0,
+                "enable_lite": false,
+                "huoshan_android_version": 0,
+                "huoshan_ios_version": 0,
+                "enable_huo_shan": false,
+                "items": [
+                    {
+                        "title": "不限",
+                        "value": "0",
+                        "log_value": "view_all"
+                    },
+                    {
+                        "title": "关注的人",
+                        "value": "3",
+                        "show_dot": 1964793600,
+                        "log_value": "follow_user"
+                    },
+                    {
+                        "title": "最近看过",
+                        "value": "1",
+                        "show_dot": 1638288000,
+                        "log_value": "recent_played"
+                    },
+                    {
+                        "title": "还未看过",
+                        "value": "2",
+                        "log_value": "unplayed"
+                    }
+                ],
+                "search_nil_text": {
+                    "info": "暂无更多，",
+                    "jump_text": "查看所有内容"
+                },
+                "search_less_text": {
+                    "info": "暂无更多，",
+                    "jump_text": "查看所有内容"
+                }
+            },
+            {
+                "title": "内容形式",
+                "name": "content_type",
+                "log_name": "by_aweme_type",
+                "default_index": 0,
+                "filter_style": 0,
+                "android_version": 200900,
+                "ios_version": 200900,
+                "lite_android_version": 0,
+                "lite_ios_version": 0,
+                "enable_lite": false,
+                "huoshan_android_version": 0,
+                "huoshan_ios_version": 0,
+                "enable_huo_shan": false,
+                "items": [
+                    {
+                        "title": "不限",
+                        "value": "0",
+                        "log_value": "type_all"
+                    },
+                    {
+                        "title": "视频",
+                        "value": "1",
+                        "log_value": "video"
+                    },
+                    {
+                        "title": "图文",
+                        "value": "2",
+                        "log_value": "picture"
+                    }
+                ],
+```
+
+
+
 
 ```
 device_platform: webapp

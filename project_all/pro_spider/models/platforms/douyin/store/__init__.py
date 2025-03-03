@@ -67,38 +67,38 @@ def _extract_comment_image_list(comment_item: Dict) -> List[str]:
     return images_res
 
 
-async def update_douyin_aweme(aweme_item: Dict):
+async def update_douyin_aweme(aweme_item: Dict,is_save):
     aweme_id = aweme_item.get("aweme_id")
     user_info = aweme_item.get("author", {})
     interact_info = aweme_item.get("statistics", {})
     save_content_item = {
-        "aweme_id": aweme_id,
+        "keyword":source_keyword_var.get() if source_keyword_var.get() else "",
+        "aweme_id": str(aweme_id),
         "aweme_type": str(aweme_item.get("aweme_type")),
         "title": aweme_item.get("desc", ""),
         "desc": aweme_item.get("desc", ""),
-        "create_time": aweme_item.get("create_time"),
-        "user_id": user_info.get("uid"),
-        "sec_uid": user_info.get("sec_uid"),
-        "short_user_id": user_info.get("short_id"),
-        "user_unique_id": user_info.get("unique_id"),
-        "user_signature": user_info.get("signature"),
-        "nickname": user_info.get("nickname"),
+        "create_time": aweme_item.get("create_time",""),
+        "user_id": str(user_info.get("uid")),
+        "sec_uid": str(user_info.get("sec_uid")),
+        "short_user_id": str(user_info.get("short_id")),
+        "user_unique_id": str(user_info.get("unique_id")),
+        "user_signature": str(user_info.get("signature")),
+        "nickname": str(user_info.get("nickname")),
         "avatar": user_info.get("avatar_thumb", {}).get("url_list", [""])[0],
         "liked_count": str(interact_info.get("digg_count")),
         "collected_count": str(interact_info.get("collect_count")),
         "comment_count": str(interact_info.get("comment_count")),
         "share_count": str(interact_info.get("share_count")),
         "ip_location": aweme_item.get("ip_label", ""),
-        "last_modify_ts": time_utils.get_current_timestamp(),
+        "last_modify_ts": str(time_utils.get_current_timestamp()),
         "aweme_url": f"https://www.douyin.com/video/{aweme_id}",
-        "source_keyword": source_keyword_var.get(),
     }
     config.logger.info(
         f"[store.douyin.update_douyin_aweme] douyin aweme id:{aweme_id}, title:{save_content_item.get('title')}"
     )
-    await DouyinStoreFactory.create_store().store_content(
-        content_item=save_content_item
-    )
+    if is_save:
+        await DouyinStoreFactory.create_store().store_content(content_item=save_content_item)
+    return save_content_item
 
 
 async def batch_update_dy_aweme_comments(aweme_id: str, comments: List[Dict]):
@@ -155,7 +155,7 @@ async def update_dy_aweme_comment(aweme_id: str, comment_item: Dict):
     )
 
 
-async def save_creator(user_id: str, creator: Dict):
+async def save_creator(user_id: str, creator: Dict,is_save=False):
     user_info = creator.get("user", {})
     gender_map = {0: "未知", 1: "男", 2: "女"}
     avatar_uri = user_info.get("avatar_300x300", {}).get("uri")
@@ -165,13 +165,15 @@ async def save_creator(user_id: str, creator: Dict):
         "gender": gender_map.get(user_info.get("gender"), "未知"),
         "avatar": f"https://p3-pc.douyinpic.com/img/{avatar_uri}"
         + r"~c5_300x300.jpeg?from=2956013662",
-        "desc": user_info.get("signature"),
-        "ip_location": user_info.get("ip_location"),
-        "follows": user_info.get("following_count", 0),
-        "fans": user_info.get("max_follower_count", 0),
-        "interaction": user_info.get("total_favorited", 0),
-        "videos_count": user_info.get("aweme_count", 0),
-        "last_modify_ts": time_utils.get_current_timestamp(),
+        "desc": user_info.get("signature",""),
+        "ip_location": user_info.get("ip_location",""),
+        "follows": str(user_info.get("following_count", 0)),
+        "fans": str(user_info.get("max_follower_count", 0)),
+        "interaction": str(user_info.get("total_favorited", 0)),
+        "videos_count": str(user_info.get("aweme_count", 0)),
+        "last_modify_ts": str(time_utils.get_current_timestamp()),
     }
-    config.logger.info(f"[store.douyin.save_creator] creator:{local_db_item}")
+    if is_save:
+        config.logger.info(f"[store.douyin.save_creator] creator:{local_db_item}")
     await DouyinStoreFactory.create_store().store_creator(local_db_item)
+    return local_db_item

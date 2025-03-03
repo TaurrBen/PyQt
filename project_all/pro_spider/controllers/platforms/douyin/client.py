@@ -50,11 +50,24 @@ class DouyinClient(AbstractApiClient):
         self.playwright_page = playwright_page
         self.cookie_dict = cookie_dict
 
-    async def __process_req_params(
-            self, uri: str, params: Optional[Dict] = None, headers: Optional[Dict] = None,
-            request_method="GET"
-    ):
+    async def request(self, method, url, **kwargs):
+        response = None
+        config.logger.debug(f"Request {method}-{url}.")
+        if method == "GET":
+            response = requests.request(method, url, **kwargs)
+        elif method == "POST":
+            response = requests.request(method, url, **kwargs)
+        try:
+            if response.text == "" or response.text == "blocked":
+                config.logger.error(f"request params incrr, response.text: {response.text}")
+                raise Exception("account blocked")
+            return response.json()
+        except Exception as e:
+            raise DataFetchError(f"{e}, {response.text}")
 
+    async def __process_req_params(
+            self, uri: str, params: Optional[Dict] = None, headers: Optional[Dict] = None,request_method="GET"
+    ):
         if not params:
             return
         headers = headers or self.headers
@@ -96,26 +109,10 @@ class DouyinClient(AbstractApiClient):
             post_data = params
         a_bogus = await get_a_bogus(uri, query_string, post_data, headers["User-Agent"], self.playwright_page)
         params["a_bogus"] = a_bogus
-
-    async def request(self, method, url, **kwargs):
-        response = None
-        if method == "GET":
-            response = requests.request(method, url, **kwargs)
-        elif method == "POST":
-            response = requests.request(method, url, **kwargs)
-        try:
-            if response.text == "" or response.text == "blocked":
-                config.logger.error(f"request params incrr, response.text: {response.text}")
-                raise Exception("account blocked")
-            return response.json()
-        except Exception as e:
-            raise DataFetchError(f"{e}, {response.text}")
+        return params
 
     async def get(self, uri: str, params: Optional[Dict] = None, headers: Optional[Dict] = None):
-        """
-        GET请求
-        """
-        await self.__process_req_params(uri, params, headers)
+        params = await self.__process_req_params(uri, params, headers)
         headers = headers or self.headers
         return await self.request(method="GET", url=f"{self._host}{uri}", params=params, headers=headers)
 
@@ -125,8 +122,10 @@ class DouyinClient(AbstractApiClient):
         return await self.request(method="POST", url=f"{self._host}{uri}", data=data, headers=headers)
 
     async def pong(self, browser_context: BrowserContext) -> bool:
+        config.logger.info("Begin pong douyin...")
         local_storage = await self.playwright_page.evaluate("() => window.localStorage")
         if local_storage.get("HasUserLogin", "") == "1":
+            config.logger.info("Use cache login state get web interface successfull!")
             return True
 
         _, cookie_dict = convert_cookies(await browser_context.cookies())
@@ -136,14 +135,17 @@ class DouyinClient(AbstractApiClient):
         cookie_str, cookie_dict = convert_cookies(await browser_context.cookies())
         self.headers["Cookie"] = cookie_str
         self.cookie_dict = cookie_dict
+        return cookie_str, cookie_dict
 
-    async def search_info_by_keyword(
+    async def search_general_by_keyword(
             self,
             keyword: str,
             offset: int = 0,
-            search_channel: SearchChannelType = SearchChannelType.GENERAL,
-            sort_type: SearchSortType = SearchSortType.GENERAL,
-            publish_time: PublishTimeType = PublishTimeType.UNLIMITED,
+            sort_type:str = "default",
+            publish_time:str = "default",
+            filter_duration:str = "default",
+            search_range:str = "default",
+            content_type:str = "default",
             search_id: str = ""
     ):
         """
@@ -156,25 +158,46 @@ class DouyinClient(AbstractApiClient):
         :param search_id: ·
         :return:
         """
+
+        sort_type = SORT_TYPE_LIST.get(sort_type,SORT_TYPE_LIST_DEFAULT)
+        publish_time = PUBLISH_TIME_LIST.get(publish_time,PUBLISH_TIME_LIST_DEFAULT)
+        filter_duration = FILTER_DURATION_LIST.get(filter_duration,FILTER_DURATION_LIST_DEFAULT)
+        search_range = SEARCH_RANGE_LIST.get(search_range,SORT_TYPE_LIST_DEFAULT)
+        content_type = CONTENT_TYPE_LIST.get(content_type,CONTENT_TYPE_LIST_DEFAULT)
+        is_filter_search = False
+        if not sort_type == SORT_TYPE_LIST_DEFAULT:
+            is_filter_search = True
+        if not publish_time == PUBLISH_TIME_LIST_DEFAULT:
+            is_filter_search = True
+        if not filter_duration == FILTER_DURATION_LIST_DEFAULT:
+            is_filter_search = True
+        if not search_range == SORT_TYPE_LIST_DEFAULT:
+            is_filter_search = True
+        if not content_type == CONTENT_TYPE_LIST_DEFAULT:
+            is_filter_search = True
+
         uri = "/aweme/v1/web/general/search/single/"
         query_params = {
-            'search_channel': search_channel.value,
+            'search_channel': "aweme_general",
             'enable_history': '1',
-            'keyword': keyword,
             'search_source': 'tab_search',
+            'keyword': keyword,
             'query_correct_type': '1',
             'is_filter_search': '0',
-            'from_group_id': '7378810571505847586',
+                'from_group_id': '7378810571505847586',
             'offset': offset,
             'count': '15',
             'need_filter_settings': '1',
             'list_type': 'multi',
             'search_id': search_id,
         }
-        if sort_type.value != SearchSortType.GENERAL.value or publish_time.value != PublishTimeType.UNLIMITED.value:
+        if is_filter_search:
             query_params["filter_selected"] = json.dumps({
-                "sort_type": str(sort_type.value),
-                "publish_time": str(publish_time.value)
+                "sort_type": sort_type,
+                "publish_time": publish_time,
+                "filter_duration":filter_duration,
+                "search_range":search_range,
+                "content_type":content_type,
             })
             query_params["is_filter_search"] = 1
             query_params["search_source"] = "tab_search"
@@ -183,23 +206,30 @@ class DouyinClient(AbstractApiClient):
         # headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
         return await self.get(uri, query_params, headers=headers)
 
-    async def get_video_by_id(self, aweme_id: str) -> Any:
+    async def get_aweme_by_id(self, aweme_id: str) -> Any:
         """
         DouYin Video Detail API
         :param aweme_id:
         :return:
         """
-        params = {
-            "aweme_id": aweme_id
-        }
-        headers = copy.copy(self.headers)
-        del headers["Origin"]
-        res = await self.get("/aweme/v1/web/aweme/detail/", params, headers)
-        return res.get("aweme_detail", {})
 
+        #TODO 接口出现问题
+
+        # uri = "/aweme/v1/web/aweme/detail/"
+        # params = {
+        #     "aweme_id": aweme_id
+        # }
+        # headers = copy.copy(self.headers)
+        # del headers["Origin"]
+        # res = await self.get(uri, params, headers)
+        # return res.get("aweme_detail", {})
+        url = f"http://127.0.0.1:80/api/douyin/web/fetch_one_video?aweme_id={aweme_id}"
+        response = requests.request("GET", url)
+        return response.json().get("data").get("aweme_detail")
+
+    #### aweme comment
     async def get_aweme_comments(self, aweme_id: str, cursor: int = 0):
         """get note comments
-
         """
         uri = "/aweme/v1/web/comment/list/"
         params = {
@@ -214,7 +244,7 @@ class DouyinClient(AbstractApiClient):
         headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
         return await self.get(uri, params)
 
-    async def get_sub_comments(self, comment_id: str, cursor: int = 0):
+    async def get_aweme_sub_comments(self, comment_id: str, cursor: int = 0):
         """
             获取子评论
         """
@@ -231,14 +261,13 @@ class DouyinClient(AbstractApiClient):
         headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
         return await self.get(uri, params)
 
-    async def get_aweme_all_comments(
-            self,
-            aweme_id: str,
-            crawl_interval: float = 1.0,
-            is_fetch_sub_comments=False,
-            callback: Optional[Callable] = None,
-            max_count: int = 10,
-    ):
+    async def get_aweme_all_level_comments(self,
+                                     aweme_id: str,
+                                     crawl_interval: float = 1.0,
+                                     is_fetch_sub_comments=False,
+                                     callback: Optional[Callable] = None,
+                                     max_count: int = 10,
+                                     ):
         """
         获取帖子的所有评论，包括子评论
         :param aweme_id: 帖子ID
@@ -290,14 +319,18 @@ class DouyinClient(AbstractApiClient):
                         await asyncio.sleep(crawl_interval)
         return result
 
+    #### user
     async def get_user_info(self, sec_user_id: str):
-        uri = "/aweme/v1/web/user/profile/other/"
-        params = {
-            "sec_user_id": sec_user_id,
-            "publish_video_strategy_type": 2,
-            "personal_center_strategy": 1,
-        }
-        return await self.get(uri, params)
+        # uri = "/aweme/v1/web/user/profile/other/"
+        # params = {
+        #     "sec_user_id": sec_user_id,
+        #     "publish_video_strategy_type": 2,
+        #     "personal_center_strategy": 1,
+        # }
+        # return await self.get(uri, params)
+        url = f"http://127.0.0.1:80/api/douyin/web/handler_user_profile?sec_user_id={sec_user_id}"
+        response = requests.request("GET", url)
+        return response.json().get("data")
 
     async def get_user_aweme_posts(self, sec_user_id: str, max_cursor: str = "") -> Dict:
         uri = "/aweme/v1/web/aweme/post/"
@@ -321,8 +354,7 @@ class DouyinClient(AbstractApiClient):
             posts_has_more = aweme_post_res.get("has_more", 0)
             max_cursor = aweme_post_res.get("max_cursor")
             aweme_list = aweme_post_res.get("aweme_list") if aweme_post_res.get("aweme_list") else []
-            config.logger.info(
-                f"[DOUYINClient.get_all_user_aweme_posts] got sec_user_id:{sec_user_id} video len : {len(aweme_list)}")
+            config.logger.info(f"Got sec_user_id:{sec_user_id} video len : {len(aweme_list)}")
             if callback:
                 await callback(aweme_list)
             result.extend(aweme_list)

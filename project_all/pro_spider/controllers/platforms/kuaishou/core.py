@@ -90,7 +90,7 @@ class KuaishouCrawler(AbstractCrawler):
                 # batch fetch video comments
                 page += 1
                 await self.batch_get_video_comments(video_id_list)
-        config.logger.info("[KuaishouCrawler.start] Kuaishou Crawler finished ...")
+        config.logger.info("[KuaishouCrawler.start] Kuaishou CrawlerApi finished ...")
     async def start(self):
         if self.playwright:
             await self.context_page.close()
@@ -132,7 +132,7 @@ class KuaishouCrawler(AbstractCrawler):
                 await self.ks_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            config.logger.info("[KilibiliCrawler.start] Kuaishou Crawler Ready ...")
+            config.logger.info("[KilibiliCrawler.start] Kuaishou CrawlerApi Ready ...")
             event = ViewDataEvent("textBrowser_context", None, self.ks_client.headers,
                                   "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
             QCoreApplication.postEvent(self.parent.ui, event)

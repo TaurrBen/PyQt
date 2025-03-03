@@ -19,6 +19,12 @@
 # version    ：python 3.9
 # Description：
 """
+#TODO 等待改成yaml文件读取
+# 读取上级再上级目录的配置文件
+# config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.yaml')
+# with open(config_path, 'r', encoding='utf-8') as file:
+#     config = yaml.safe_load(file)
+
 import os
 
 PROJECTS = ["pro_spider","pro_example1","pro_example2","pro_tcp_udp_web","pro3"]

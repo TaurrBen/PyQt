@@ -47,8 +47,6 @@ def get_web_id():
     )
     return web_id.replace('-', '')[:19]
 
-
-
 async def get_a_bogus(url: str, params: str, post_data: dict, user_agent: str, page: Page = None):
     """
     获取 a_bogus 参数, 目前不支持post请求类型的签名

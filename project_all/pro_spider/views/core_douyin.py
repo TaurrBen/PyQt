@@ -30,7 +30,7 @@ from utils.thread.MyQThreading import AsyncioThread
 from .ui.platforms.douyin.ui_douyin import Ui_douyin
 import config
 from utils.log import *
-from ..controllers.platforms import CrawlerFactory, DouYinCrawler
+from ..controllers.platforms import CrawlerFactory, DouyinCrawler
 
 
 class View_douyin():
@@ -187,7 +187,7 @@ class View_douyin():
         except Exception as e:
             config.logger.error(e)
         ## check params
-        if not isinstance(self.ctrl.crawler,DouYinCrawler):
+        if not isinstance(self.ctrl.crawler,DouyinCrawler):
             self.ctrl.crawler = CrawlerFactory.create_crawler(self, platform="douyin")
         self.ui.pushButton_video_items_export.setEnabled(False)
         self.ui.pushButton_video_upuser_items_export.setEnabled(False)

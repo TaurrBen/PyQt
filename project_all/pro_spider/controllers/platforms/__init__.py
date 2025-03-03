@@ -21,7 +21,7 @@
 """
 from utils.spider import AbstractCrawler
 from .bilibili import BilibiliCrawler
-from .douyin import DouYinCrawler
+from .douyin import DouyinCrawler
 from .kuaishou import KuaishouCrawler
 from .tieba import TiebaCrawler
 from .weibo import WeiboCrawler
@@ -31,7 +31,7 @@ from .zhihu import ZhihuCrawler
 class CrawlerFactory:
     CRAWLERS = {
         "bilibili": BilibiliCrawler,
-        "douyin":DouYinCrawler,
+        "douyin":DouyinCrawler,
         "kuaishou":KuaishouCrawler,
         "tieba":TiebaCrawler,
         "weibo":WeiboCrawler,

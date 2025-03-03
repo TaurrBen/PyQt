@@ -12,10 +12,27 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : __init__.py.py
-# Time       ：2025.2.14 23:51
+# File       : deprecated_decorator.py
+# Time       ：2025.3.3 3:24
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
-# Description：
+# Description：可用于版本更新 弃用装饰器
 """
+import warnings
+import functools
+
+def deprecated(message):
+    def decorator(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            warnings.warn(
+                f"{func.__name__} is deprecated: {message}",
+                DeprecationWarning,
+                stacklevel=2
+            )
+            return await func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

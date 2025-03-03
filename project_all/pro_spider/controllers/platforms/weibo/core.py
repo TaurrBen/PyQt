@@ -91,7 +91,7 @@ class WeiboCrawler(AbstractCrawler):
 
                     page += 1
                     await self.batch_get_notes_comments(note_id_list)
-            config.logger.info("[WeiboCrawler.start] Weibo Crawler finished ...")
+            config.logger.info("[WeiboCrawler.start] Weibo CrawlerApi finished ...")
             event = ViewDataEvent("pushButton_load_params", None, None,
                                   "qwidget.setEnabled(True)")
             QCoreApplication.postEvent(self.parent.ui, event)
@@ -154,7 +154,7 @@ class WeiboCrawler(AbstractCrawler):
                 await self.wb_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            config.logger.info("[BilibiliCrawler.start] Bilibili Crawler Ready ...")
+            config.logger.info("[BilibiliCrawler.start] Bilibili CrawlerApi Ready ...")
             event = ViewDataEvent("textBrowser_context", None, self.wb_client.headers,
                                   "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
             QCoreApplication.postEvent(self.parent.ui, event)

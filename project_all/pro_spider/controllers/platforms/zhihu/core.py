@@ -101,7 +101,7 @@ class ZhihuCrawler(AbstractCrawler):
                     except DataFetchError:
                         config.logger.error("[ZhihuCrawler.search] Search content error")
                         return
-        config.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
+        config.logger.info("[ZhihuCrawler.start] Zhihu CrawlerApi finished ...")
         event = ViewDataEvent("pushButton_load_params", None, None,
                               "qwidget.setEnabled(True)")
         QCoreApplication.postEvent(self.parent.ui, event)
@@ -170,7 +170,7 @@ class ZhihuCrawler(AbstractCrawler):
             await self.zhihu_client.update_cookies(browser_context=self.browser_context)
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            config.logger.info("[ZhihuCrawler.start] Zhihu Crawler Ready ...")
+            config.logger.info("[ZhihuCrawler.start] Zhihu CrawlerApi Ready ...")
             event = ViewDataEvent("textBrowser_context", None, self.zhihu_client.headers,
                                   "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
             QCoreApplication.postEvent(self.parent.ui, event)

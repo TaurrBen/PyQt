@@ -87,7 +87,7 @@ class TiebaCrawler(AbstractCrawler):
                     config.logger.error(
                         f"[BaiduTieBaCrawler.search] Search keywords error, current page: {page}, current keyword: {keyword}, err: {ex}")
                     break
-        config.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler finished ...")
+        config.logger.info("[BaiduTieBaCrawler.start] Tieba CrawlerApi finished ...")
     async def start(self) -> None:
         """
         Start the crawler
@@ -112,7 +112,7 @@ class TiebaCrawler(AbstractCrawler):
             default_ip_proxy=httpx_proxy_format,
         )
         crawler_type_var.set(config.CRAWLER_TYPE)
-        config.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler Ready ...")
+        config.logger.info("[BaiduTieBaCrawler.start] Tieba CrawlerApi Ready ...")
         event = ViewDataEvent("textBrowser_context", None, self.tieba_client.headers,
                               "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
         QCoreApplication.postEvent(self.parent.ui, event)

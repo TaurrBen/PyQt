@@ -60,9 +60,9 @@ class BilibiliCrawler(AbstractCrawler):
             await self.context_page.close()
             await self.browser_context.close()
             await self.playwright.stop()
-        config.logger.info("Bilibili Crawler Start ...")
+        config.logger.info("Bilibili CrawlerApi Start ...")
+        proxy_name = self.params.get("proxy")
         playwright_proxy_format, httpx_proxy_format = None, None
-        proxy_name =self.params.get("proxy")
         if not proxy_name == "none":
             ip_proxy_pool = await create_ip_pool(config.IP_PROXY_POOL_COUNT, enable_validate_ip=True,proxy_name=proxy_name)
             ip_proxy_info: IpInfoModel = await ip_proxy_pool.get_proxy()
@@ -108,7 +108,7 @@ class BilibiliCrawler(AbstractCrawler):
             event = ViewDataEvent("pushButton_stop_search", None, None,
                                   "qwidget.setEnabled(False)")
             QCoreApplication.postEvent(self.parent.ui, event)
-            config.logger.info("Bilibili Crawler Ready ...")
+            config.logger.info("Bilibili CrawlerApi Ready ...")
 
     async def stop(self):
         if self.playwright:
@@ -132,7 +132,7 @@ class BilibiliCrawler(AbstractCrawler):
         elif type == "bvids":
             await self.by_bvids(self.params.get("bvids"))
         elif type == "upuser":
-            await self.by_upuser(self.params.get("upusers"))
+            await self.by_upuser(self.params.get("upuser"))
         else:
             config.logger.error(f"Have not {type}.")
    
@@ -144,8 +144,8 @@ class BilibiliCrawler(AbstractCrawler):
         """
         config.logger.info("Begin search bilibli keywords")
         bili_limit_count = 20  # bilibili limit page fixed value Max36
-        # if config.CRAWLER_MAX_NOTES_COUNT < bili_limit_count:
-        #     config.CRAWLER_MAX_NOTES_COUNT = bili_limit_count
+        if self.params.get("video_count") < bili_limit_count:
+            self.params["video_count"] = bili_limit_count
         start_page = self.params.get("start_page")  # start page number
         event = ViewDataEvent("pushButton_load_params", None, None,
                               "qwidget.setEnabled(False)")
@@ -207,7 +207,7 @@ class BilibiliCrawler(AbstractCrawler):
                     except Exception as e:
                         config.logger.error(f"{e}")
                         break
-        config.logger.info("Bilibili Crawler finished ...")
+        config.logger.info("Bilibili CrawlerApi finished ...")
         event = ViewDataEvent("pushButton_load_params", None, None,
                               "qwidget.setEnabled(True)")
         QCoreApplication.postEvent(self.parent.ui, event)
@@ -224,7 +224,7 @@ class BilibiliCrawler(AbstractCrawler):
                               "qwidget.setEnabled(True)")
         QCoreApplication.postEvent(self.parent.ui, event)
 
-    async def by_bvids(self, bvids_list: List[str]):
+    async def by_bvids(self, bvids: List[str]):
         """
         get specified videos info
         :return:
@@ -232,7 +232,7 @@ class BilibiliCrawler(AbstractCrawler):
         semaphore = asyncio.Semaphore(self.params.get("concurrency_num",1))
         task_list = [
             self.get_video_info_task(aid=0, bvid=video_id, semaphore=semaphore) for video_id in
-            bvids_list
+            bvids
         ]
         video_details = await asyncio.gather(*task_list)
         video_aids_list = []
@@ -254,8 +254,22 @@ class BilibiliCrawler(AbstractCrawler):
             QCoreApplication.postEvent(self.parent.ui, event)
             await self.get_bilibili_video(video_detail, semaphore)
         await self.batch_get_video_comments(video_aids_list)
-        config.logger.info("Bilibili Crawler finished ...")
-    
+        config.logger.info("Bilibili CrawlerApi finished ...")
+        event = ViewDataEvent("pushButton_load_params", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_start_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_stop_search", None, None,
+                              "qwidget.setEnabled(False)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_video_items_export", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
+        event = ViewDataEvent("pushButton_video_upuser_items_export", None, None,
+                              "qwidget.setEnabled(True)")
+        QCoreApplication.postEvent(self.parent.ui, event)
     async def by_upuser(self, upuser_id: int):
         """
         get videos for a upuser

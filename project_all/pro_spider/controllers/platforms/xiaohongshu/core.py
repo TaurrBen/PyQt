@@ -138,7 +138,7 @@ class XiaohongshuCrawler(AbstractCrawler):
                             "[XiaoHongShuCrawler.search] Get note detail error"
                         )
                         break
-        config.logger.info("[XiaoHongShuCrawler.start] Xhs Crawler finished ...")
+        config.logger.info("[XiaoHongShuCrawler.start] Xhs CrawlerApi finished ...")
 
     async def start(self) -> None:
         if self.playwright:
@@ -195,7 +195,7 @@ class XiaohongshuCrawler(AbstractCrawler):
                 )
 
             crawler_type_var.set(config.CRAWLER_TYPE)
-            config.logger.info("[BilibiliCrawler.start] Bilibili Crawler Ready ...")
+            config.logger.info("[BilibiliCrawler.start] Bilibili CrawlerApi Ready ...")
             event = ViewDataEvent("textBrowser_context", None, self.xhs_client.headers,
                                   "for key,value in event.data.items():qwidget.append(f'{key}:{value}')")
             QCoreApplication.postEvent(self.parent.ui, event)
