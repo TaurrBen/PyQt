@@ -12,10 +12,39 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : store.py
-# Time       ：2025.2.14 23:41
+# File       : field.py
+# Time       ：2025.2.22 11:35
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+from enum import Enum
+
+
+class SearchOrderType(Enum):
+    # 综合排序
+    DEFAULT = ""
+
+    # 最多点击
+    MOST_CLICK = "click"
+
+    # 最新发布
+    LAST_PUBLISH = "pubdate"
+
+    # 最多弹幕
+    MOST_DANMU = "dm"
+
+    # 最多收藏
+    MOST_MARK = "stow"
+
+
+class CommentOrderType(Enum):
+    # 仅按热度
+    DEFAULT = 0
+
+    # 按热度+按时间
+    MIXED = 1
+
+    # 按时间
+    TIME = 2

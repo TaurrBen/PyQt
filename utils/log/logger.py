@@ -22,15 +22,28 @@
 import logging
 import logging.config
 import logging.handlers
-
 def init_loging_config(filename):
     logging.config.fileConfig(filename)
-    rootHandle = logging.getLogger("root")
-    CAndFHandle = logging.getLogger("CAndFLogger")
-    consoleHandle = logging.getLogger("consoleLogger")
-    fileHandle = logging.getLogger("fileLogger")
-    _logger = rootHandle,CAndFHandle,consoleHandle,fileHandle
-    return _logger
+
+    all_loggers = []
+    all_handlers = []
+    # 1. 获取根Logger的处理器
+    root_logger = logging.getLogger()
+    all_loggers.append(root_logger)
+    all_handlers.extend(root_logger.handlers)
+    # 2. 获取其他Logger的处理器
+    for logger_name, logger_obj in logging.Logger.manager.loggerDict.items():
+        if isinstance(logger_obj, logging.Logger):
+            if logger_obj.handlers:
+                all_loggers.append(logger_obj)
+            all_handlers.extend(logger_obj.handlers)
+
+    # root = logging.getLogger("root")
+    # all = logging.getLogger("AllLogger")
+    # console = logging.getLogger("consoleLogger")
+    # file = logging.getLogger("fileLogger")
+    # all_logger = root,all,console,file
+    return all_loggers,all_handlers
 
 def init_loging_config1(logger_name,file_name,level=logging.DEBUG):
     formatter = logging.Formatter(fmt="%(asctime)s - %(name)s - (%(process)d:%(threadName)s:%(thread)d) "

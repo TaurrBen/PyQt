@@ -12,10 +12,19 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : bilibili_store_impl.py
-# Time       ：2025.2.14 23:41
+# File       : exception.py
+# Time       ：2025.2.22 11:32
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+from httpx import RequestError
+
+
+class DataFetchError(RequestError):
+    """something error when fetch"""
+
+
+class IPBlockError(RequestError):
+    """fetch so fast that the server block us ip"""

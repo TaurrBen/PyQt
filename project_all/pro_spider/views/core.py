@@ -19,11 +19,18 @@
 # version    ：python 3.9
 # Description：
 """
-
+import asyncio
+import threading
+import time
 
 from PyQt5 import QtCore
+from PyQt5.QtCore import Qt,QThread
 
-from .ui_bilibili import Ui_MainWindow
+from utils.thread.MyQThreading import AsyncioThread
+from .ui.platforms.bilibili.ui_bilibili import Ui_bilibili
+import config
+from utils.log import *
+from ..controllers.platforms import CrawlerFactory
 
 class View():
 
@@ -44,26 +51,34 @@ class View():
     #### 2.初始化 ####
     def __init__(self, model, ctrl):
         self.ctrl = ctrl
+        self.textBrowser_msg_handler = QTextBrowserHandler()
         super(View, self).__init__()
-        self.build_ui()
+        self.build_ui(self)
         self.ui.show()
 
-    def build_ui(self):
-        self.ui = Ui_MainWindow()
+    def build_ui(self,parent):
+        self.ui = Ui_bilibili(parent)
         self.setup_bindings()
         self.initial_datas_load()
 
     #### connect widget signals to event functions ####
     def setup_bindings(self):
-        pass
         #### ui signal -----> ui slots ####
-        self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
+        # self.ui.comboBox.currentIndexChanged.connect(self.combobox_change)
+        self.ui.pushButton_start_search.clicked.connect(self.btn_start_search_clicked)
+        self.ui.pushButton_stop_search.clicked.connect(self.btn_stop_search_clicked)
+        self.ui.pushButton_load_params.clicked.connect(self.btn_load_params_clicked)
+
+        for handler in config.all_handlers:
+            if isinstance(handler, QTextBrowserHandler):
+                # 绑定信号到UI更新
+                handler.append_log.connect(self.append_log)
 
         #### 可形成闭环 ####
         #### ui signal -----? ctrl slots ####
-        self.ui.comboBox.currentIndexChanged.connect(lambda : self.ctrl.set_msg(self.ui.comboBox.currentText()))
+        # self.ui.comboBox.currentIndexChanged.connect(lambda : self.ctrl.set_msg(self.ui.comboBox.currentText()))
         #### ui slots <----- ctrl signal ####
-        self.ctrl.signal_write_msg.connect(lambda str:self.update_msg(str))
+        # self.ctrl.signal_write_msg.connect(lambda str:self.update_msg(str))
 
     def initial_datas_load(self):
         self.combobox_change()
@@ -80,6 +95,82 @@ class View():
     #         self.set_proxy()
     def combobox_change(self):
         _translate = QtCore.QCoreApplication.translate
+
+    def append_log(self,msg, level):
+        if self.ui.checkBox_debug.isChecked():
+            color_map = {
+                'debug': Qt.gray,
+                'info': Qt.black,
+                'warning': Qt.yellow,
+                'error': Qt.red,
+                'critical': Qt.darkCyan
+            }
+            self.ui.textBrowser_debug.setTextColor(color_map[level])
+            self.ui.textBrowser_debug.append(msg)
+
+    def btn_start_search_clicked(self):
+        config.logger.info("触发1")
+        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.search_by_keyword(), self.ctrl.loop)
+        # 向asyncio中增加一个普通函数任务
+        # self.ctrl.loop.call_soon_threadsafe(self.printInfo, 'andyshengjl')
+        config.logger.info("触发11")
+
+    def btn_stop_search_clicked(self):
+        # self.ctrl.thd.stop()
+        config.logger.info("触发2")
+        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.stop(), self.ctrl.loop)
+        config.logger.info("触发22")
+
+    def btn_load_params_clicked(self):
+        try:
+            self.params = {
+                "is_playwright":self.ui.checkBox_is_playwright.isChecked(),
+                "headless":self.ui.checkBox_headless.isChecked(),
+                "proxy":self.ui.comboBox_proxy_type.currentText(),
+                "concurrency_num":int(self.ui.lineEdit_concurrency_num.text()),
+                "type":self.ui.comboBox_type.currentText(),
+
+                "keyword":self.ui.lineEdit_keyword.text().split(","),
+                "search_type":self.ui.comboBox_search_type.currentText(),
+                "order_type":self.ui.comboBox_order_type.currentText(),
+                "pubtime_begin_s":self.ui.dateEdit_pubtime_begin_s.date().toString("yyyy-MM-dd"),
+                "pubtime_end_s":self.ui.dateEdit_pubtime_end_s.date().toString("yyyy-MM-dd"),
+                "duration":self.ui.comboBox_duration.currentIndex(),
+                "tids":self.ui.comboBox_tids.currentText(),
+
+                "bvid":self.ui.lineEdit_bvid.text(),
+                "other_page":self.ui.radioButton_other_page.isChecked(),
+
+                "upuser":self.ui.label_upuser.text(),
+                "upuser_type":self.ui.comboBox_upuser_type.currentText(),
+
+                "download_video":self.ui.checkBox_download_video.isChecked(),
+                "download_comment":self.ui.checkBox_download_comment.isChecked(),
+                "sub_comment":self.ui.checkBox_download_sub_comment.isChecked(),
+
+                "video_count": int(self.ui.lineEdit_video_count.text()),
+                "start_page": [self.ui.checkBox_start_page.isChecked(),
+                               int(self.ui.lineEdit_start_page.text())],
+                "comment_count":int(self.ui.lineEdit_conment_count.text()),
+
+                "video_items_is_save":self.ui.checkBox_video_items_is_save.isChecked(),
+                "video_upuser_items_is_save": self.ui.checkBox_video_upuser_items_is_save.isChecked(),
+
+                "debug":self.ui.checkBox_debug.isChecked()
+            }
+        except Exception as e:
+            config.logger.error(e)
+        ## check params
+        if self.ctrl.crawler is None:
+            self.ctrl.crawler = CrawlerFactory.create_crawler(self, platform="bili")
+        self.ui.pushButton_video_items_export.setEnabled(False)
+        self.ui.pushButton_video_upuser_items_export.setEnabled(False)
+        self.ui.pushButton_start_search.setEnabled(False)
+        self.ui.pushButton_stop_search.setEnabled(False)
+        asyncio.run_coroutine_threadsafe(self.ctrl.crawler.start(), self.ctrl.loop)
+        self.ctrl.crawler.load_params(self.params)
+
+
 
     #### ui slots <----- ctrl signal ####
     def update_msg(self,msg):

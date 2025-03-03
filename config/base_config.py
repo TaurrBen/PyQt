@@ -21,11 +21,12 @@
 """
 import os
 
-PROJECTS = ["pro_example","pro_example2","pro1","pro3","pro_spider"]
-LOG_FILE_NAME = "logging.conf"
-LOG_NUM = 1  #0:root 1:CandF 2:C 3:F
+PROJECTS = ["pro_spider","pro_example1","pro_example2","pro_tcp_udp_web","pro3"]
+LOG_FILE_NAME = "logging.ini"
+LOG_NUM = 1  #0:root 1:All 2:C 3:F 4：Text
 
-from utils.log import logger
+from utils.log import *
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-logger = logger.init_loging_config(os.path.join(BASE_DIR,LOG_FILE_NAME))[LOG_NUM]
-# logger = logger.init_loging_config1("QtProjectManager","debug.log")
+all_logger,all_handlers = init_loging_config(os.path.join(BASE_DIR,LOG_FILE_NAME))
+logger = all_logger[LOG_NUM]
+# logger = init_loging_config1("QtProjectManager","debug.log")

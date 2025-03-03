@@ -12,10 +12,34 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : bilibili_store_impl.py
-# Time       ：2025.2.14 23:41
+# File       : cache_factory.py
+# Time       ：2025.2.22 10:39
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+
+class CacheFactory:
+    """
+    缓存工厂类
+    """
+
+    @staticmethod
+    def create_cache(cache_type: str, *args, **kwargs):
+        """
+        创建缓存对象
+        :param cache_type: 缓存类型
+        :param args: 参数
+        :param kwargs: 关键字参数
+        :return:
+        """
+        if cache_type == 'memory':
+            from .local_cache import ExpiringLocalCache
+            return ExpiringLocalCache(*args, **kwargs)
+        elif cache_type == 'redis':
+            from .redis_cache import RedisCache
+            return RedisCache()
+        else:
+            raise ValueError(f'Unknown cache type: {cache_type}')
+

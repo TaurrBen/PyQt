@@ -12,10 +12,25 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : bilibili_store_impl.py
-# Time       ：2025.2.14 23:41
+# File       : custom_handlers.py
+# Time       ：2025.2.22 13:16
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+import logging
+from PyQt5.QtCore import QObject, pyqtSignal
+
+class QTextBrowserHandler(QObject, logging.Handler):
+    append_log = pyqtSignal(str, str)  # 信号：日志内容、日志级别
+
+    def __init__(self):
+        super().__init__()
+        logging.Handler.__init__(self)
+        # self.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s: %(message)s'))
+
+    def emit(self, record):
+        msg = self.format(record)
+        level = record.levelname.lower()
+        self.append_log.emit(msg, level)

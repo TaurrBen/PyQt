@@ -12,10 +12,24 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : bilibili_store_impl.py
-# Time       ：2025.2.14 23:41
+# File       : var.py
+# Time       ：2025.2.22 12:00
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+from asyncio.tasks import Task
+from contextvars import ContextVar
+from typing import List
+
+import aiomysql
+
+from utils.mysql.async_db import AsyncMysqlDB
+
+request_keyword_var: ContextVar[str] = ContextVar("request_keyword", default="")
+crawler_type_var: ContextVar[str] = ContextVar("crawler_type", default="")
+comment_tasks_var: ContextVar[List[Task]] = ContextVar("comment_tasks", default=[])
+media_crawler_db_var: ContextVar[AsyncMysqlDB] = ContextVar("media_crawler_db_var")
+db_conn_pool_var: ContextVar[aiomysql.Pool] = ContextVar("db_conn_pool_var")
+source_keyword_var: ContextVar[str] = ContextVar("source_keyword", default="")

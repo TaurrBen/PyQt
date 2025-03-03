@@ -12,44 +12,36 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : ui_bilibili.py
-# Time       ：2025.2.20 16:54
+# File       : ui_spider.py
+# Time       ：2025.2.22 9:45
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
 import sys
-from .ui.platforms.bilibili.baseui_bilibili import Ui_base_bilibili
+
+from baseui_spider import Ui_baseui_spider
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
-class Ui_MainWindow(QWidget,Ui_base_bilibili):
+class Ui_spider(QMainWindow,Ui_baseui_spider):
     signal_write_msg = QtCore.pyqtSignal(str)
-    def __init__(self):
-        super(Ui_MainWindow, self).__init__()
+    def __init__(self,parent=None):
+        self.parent = parent
+        super(Ui_spider, self).__init__()
         self.setupUi(self)
         self.initialUi()
 
     def initialUi(self):
         pass
-        # self.dateEdit_pubtime_begin_s.setDateTime(QtCore.QDateTime.currentDateTime())
-        # self.dateEdit_pubtime_begin_s.setCalendarPopup(True)
-        # self.dateEdit_pubtime_end_s.setDateTime((QtCore.QDateTime.currentDateTime()))
-        # self.dateEdit_pubtime_end_s.setCalendarPopup(True)
 
 
-
-
-
-    @QtCore.pyqtSlot()
-    def aa(self):
-        pass
 
 def main():
     app = QApplication(sys.argv)
-    ui = Ui_MainWindow()
+    ui = Ui_spider()
     ui.show()
     sys.exit(app.exec_())
 

@@ -19,7 +19,18 @@
 # version    ：python 3.9
 # Description：
 """
+import asyncio
+import threading
+import time
+
 from PyQt5 import QtCore
+from PyQt5.QtCore import QThread
+
+import config
+from utils.spider import AbstractCrawler
+from utils.thread.MyQThreading import RunThread, async_RunThread, AsyncioThread
+from .platforms import CrawlerFactory
+
 class Controller(QtCore.QObject):
 
     #### 1.定义暴露属性 ####
@@ -28,6 +39,7 @@ class Controller(QtCore.QObject):
     # test_enabled = QtCore.pyqtProperty(bool, fget=lambda self: self.ui.comboBox_test.isEnabled(),
     #                             fset=lambda self, v: self.ui.comboBox_test.setEnabled(v))
     #### properties for widget value ####
+    crawler: AbstractCrawler = None
     @property
     def test(self):
         return object
@@ -36,13 +48,16 @@ class Controller(QtCore.QObject):
     def test(self, value):
         return object
 
-    #### 2.定义signal ####
+    #### 2.定义signal等变量 ####
     signal_write_msg = QtCore.pyqtSignal(str)
 
     #### 3.初始化 ####
     def __init__(self, model):
         super(Controller, self).__init__()
         self.model = model
+        self.loop = asyncio.new_event_loop()
+        self.crawler_thread = AsyncioThread(self.loop)
+        self.crawler_thread.start()
         self.setup_bindings()
 
     def setup_bindings(self):

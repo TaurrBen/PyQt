@@ -12,10 +12,22 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : bilibili_store_impl.py
-# Time       ：2025.2.14 23:41
+# File       : eventClass.py
+# Time       ：2025.2.25 17:14
 # Author     ：Benboy
 # Email      : hgq1633923487@gmail.com
 # version    ：python 3.9
 # Description：
 """
+from PyQt5.QtCore import QEvent
+
+
+class ViewDataEvent(QEvent):
+    #QT 用户事件
+    idType = QEvent.registerEventType()
+    def __init__(self, qname, datatype, data,callback_name):
+        super().__init__(ViewDataEvent.idType)
+        self.qname = qname
+        self.datatype = datatype
+        self.data = data
+        self.callback_name = callback_name
